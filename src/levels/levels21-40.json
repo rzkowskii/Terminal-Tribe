@@ -1,0 +1,233 @@
+{
+  "levels": [
+    {
+      "id": 21,
+      "title": "Eliminating Evidence",
+      "story": "We must remove the obsolete 'beta_plan' file to prevent it falling into enemy hands.",
+      "task": "Remove the file named beta_plan.",
+      "expectedCommand": "rm beta_plan",
+      "successMessage": "File erased. Evidence of our previous plan is gone.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "beta_plan": {
+            "type": "file",
+            "content": "Obsolete plan data",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      }
+    },
+    {
+      "id": 22,
+      "title": "Complete Eradication",
+      "story": "The 'temp_files' directory contains sensitive data that needs to be completely destroyed.",
+      "task": "Remove the directory temp_files and all its contents.",
+      "expectedCommand": "rm -r temp_files",
+      "successMessage": "Directory and all contents removed. No traces remain.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "temp_files": {
+            "type": "directory",
+            "files": {
+              "data1.txt": {
+                "type": "file",
+                "content": "Sensitive data 1",
+                "permissions": "-rw-r--r--",
+                "owner": "recruit",
+                "group": "tribe",
+                "size": 1024
+              },
+              "data2.txt": {
+                "type": "file",
+                "content": "Sensitive data 2",
+                "permissions": "-rw-r--r--",
+                "owner": "recruit",
+                "group": "tribe",
+                "size": 1024
+              }
+            },
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      }
+    },
+    {
+      "id": 23,
+      "title": "Linking the Chains",
+      "story": "For quick access, create a direct link to 'master_file' in your current directory.",
+      "task": "Create a hard link to the file master_file.",
+      "expectedCommand": "ln master_file master_file_link",
+      "successMessage": "Hard link created. 'master_file' is now directly accessible.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "master_file": {
+            "type": "file",
+            "content": "Master file content",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "master_file": {
+            "type": "file",
+            "content": "Master file content",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "master_file_link": {
+            "type": "file",
+            "content": "Master file content",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          }
+        }
+      }
+    },
+    {
+      "id": 24,
+      "title": "Symbolic Connection",
+      "story": "Set up a symbolic link to 'shared_resources' for easier collaboration.",
+      "task": "Create a symbolic link named resources_link pointing to shared_resources.",
+      "expectedCommand": "ln -s shared_resources resources_link",
+      "successMessage": "Symbolic link established. Resource sharing is now streamlined.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "shared_resources": {
+            "type": "directory",
+            "files": {
+              "resource1.txt": {
+                "type": "file",
+                "content": "Resource 1",
+                "permissions": "-rw-r--r--",
+                "owner": "recruit",
+                "group": "tribe",
+                "size": 1024
+              }
+            },
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "shared_resources": {
+            "type": "directory",
+            "files": {
+              "resource1.txt": {
+                "type": "file",
+                "content": "Resource 1",
+                "permissions": "-rw-r--r--",
+                "owner": "recruit",
+                "group": "tribe",
+                "size": 1024
+              }
+            },
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          },
+          "resources_link": {
+            "type": "symlink",
+            "target": "shared_resources",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    },
+    {
+      "id": 25,
+      "title": "Recognizing Links",
+      "story": "Verify the nature of 'resources_link' to ensure it's properly linked.",
+      "task": "Check the file type of resources_link in a long listing.",
+      "expectedCommand": "ls -l",
+      "successMessage": "Confirmed! 'resources_link' is a symbolic link.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "shared_resources": {
+            "type": "directory",
+            "files": {
+              "resource1.txt": {
+                "type": "file",
+                "content": "Resource 1",
+                "permissions": "-rw-r--r--",
+                "owner": "recruit",
+                "group": "tribe",
+                "size": 1024
+              }
+            },
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          },
+          "resources_link": {
+            "type": "symlink",
+            "target": "shared_resources",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "shared_resources": {
+            "type": "directory",
+            "files": {
+              "resource1.txt": {
+                "type": "file",
+                "content": "Resource 1",
+                "permissions": "-rw-r--r--",
+                "owner": "recruit",
+                "group": "tribe",
+                "size": 1024
+              }
+            },
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          },
+          "resources_link": {
+            "type": "symlink",
+            "target": "shared_resources",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    }
+  ]
+}

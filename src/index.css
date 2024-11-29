@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-terminal-bg text-terminal-text;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.terminal-window {
+  @apply bg-terminal-bg/30 backdrop-blur-sm;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.terminal-input {
+  @apply text-terminal-text;
+  caret-color: theme('colors.terminal-prompt');
+}
+
+.terminal-input::placeholder {
+  @apply text-terminal-text/30;
+}
+
+.terminal-prompt {
+  @apply text-terminal-prompt;
+}
+
+.terminal-success {
+  @apply text-terminal-success;
+}
+
+.terminal-error {
+  @apply text-terminal-error;
+}
+
+.terminal-info {
+  @apply text-terminal-info;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-terminal-bg/30;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-terminal-prompt/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-terminal-prompt/50;
+}
+
+/* Selection Styles */
+::selection {
+  @apply bg-terminal-prompt/30 text-terminal-text;
+}
+
+/* Focus Styles */
+button:focus-visible,
+input:focus-visible {
+  @apply outline-none ring-2 ring-terminal-prompt/50 ring-offset-1 ring-offset-terminal-bg;
+}
+
+/* Button Hover Effects */
+button {
+  @apply transition-all duration-200;
+}
+
+button:active {
+  @apply transform scale-95;
+}
