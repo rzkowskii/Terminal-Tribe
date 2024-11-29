@@ -1,21 +1,11 @@
-export interface TerminalCommand {
-  id: string;
+export interface CommandHistoryEntry {
   command: string;
-  output?: string;
-  status?: 'success' | 'error' | 'info' | 'pending';
-}
-
-export interface TerminalState {
-  history: {
-    commands: TerminalCommand[];
-  };
+  output: string;
+  status: 'pending' | 'success' | 'error' | 'info';
 }
 
 export interface TerminalStore {
-  history: {
-    commands: TerminalCommand[];
-  };
-  addCommand: (command: string) => string;
-  setCommandOutput: (id: string, output: string, status: TerminalCommand['status']) => void;
+  commandHistory: CommandHistoryEntry[];
+  addToHistory: (entry: CommandHistoryEntry) => void;
   clearHistory: () => void;
 }

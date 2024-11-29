@@ -1,51 +1,20 @@
 import { create } from 'zustand';
-import { v4 as uuidv4 } from 'uuid';
-import { TerminalStore, TerminalCommand } from '../types/terminal';
+import { CommandHistoryEntry, TerminalStore } from '../types/terminal';
 
 const useTerminalStore = create<TerminalStore>((set) => ({
-  history: {
-    commands: [],
-  },
+  commandHistory: [],
 
-  addCommand: (command: string) => {
-    const id = uuidv4();
+  addToHistory: (entry: CommandHistoryEntry) => {
     set((state) => ({
-      history: {
-        commands: [
-          ...state.history.commands,
-          {
-            id,
-            command,
-          },
-        ],
-      },
-    }));
-    return id;
-  },
-
-  setCommandOutput: (id: string, output: string, status: TerminalCommand['status']) => {
-    set((state) => ({
-      history: {
-        commands: state.history.commands.map((cmd) =>
-          cmd.id === id
-            ? {
-                ...cmd,
-                output,
-                status,
-              }
-            : cmd
-        ),
-      },
+      commandHistory: [...state.commandHistory, entry]
     }));
   },
 
   clearHistory: () => {
-    set({
-      history: {
-        commands: [],
-      },
-    });
-  },
+    set(() => ({
+      commandHistory: []
+    }));
+  }
 }));
 
 export default useTerminalStore;
