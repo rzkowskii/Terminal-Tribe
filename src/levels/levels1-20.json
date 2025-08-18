@@ -1,0 +1,683 @@
+{
+  "levels": [
+    {
+      "id": 1,
+      "title": "Location Check",
+      "story": "First task, recruit. Before we begin your training, we need to verify your location in the system.",
+      "task": "Display your current location in the system.",
+      "expectedCommand": "pwd",
+      "successMessage": "Excellent work! You're in /home/recruit. Always know your position in the system.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      }
+    },
+    {
+      "id": 5,
+      "title": "Scan the Cache",
+      "story": "Inventory needed. See what remains in your working area.",
+      "task": "List the contents of the current directory.",
+      "expectedCommand": "ls",
+      "successMessage": "Contents catalogued. Resources noted.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Detailed Manifest",
+      "story": "We need metadata: permissions, owners, and sizes.",
+      "task": "List in long format.",
+      "expectedCommand": "ls -l",
+      "successMessage": "Full details exposed. Nothing hidden.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Hidden Caches",
+      "story": "Reveal dotfiles and concealed entries.",
+      "task": "List all files, including hidden.",
+      "expectedCommand": "ls -a",
+      "successMessage": "Hidden files revealed. Secrets found.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          ".secret": {
+            "type": "file",
+            "content": "Hidden intelligence data",
+            "permissions": "-rw-------",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 512
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          ".secret": {
+            "type": "file",
+            "content": "Hidden intelligence data",
+            "permissions": "-rw-------",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 512
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Enter the Vault",
+      "story": "Go into the missions directory to access assignments.",
+      "task": "Change into the missions directory.",
+      "expectedCommand": "cd missions",
+      "successMessage": "Vault entered. Deeper access gained.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit/missions",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Complete Visibility",
+      "story": "Show all entries with full details.",
+      "task": "List all files in long format.",
+      "expectedCommand": "ls -la",
+      "successMessage": "Total visibility achieved. All revealed.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          ".secret": {
+            "type": "file",
+            "content": "Hidden intelligence data",
+            "permissions": "-rw-------",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 512
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          ".secret": {
+            "type": "file",
+            "content": "Hidden intelligence data",
+            "permissions": "-rw-------",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 512
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    },
+    {
+      "id": 10,
+      "title": "Deep Mapping",
+      "story": "Map subdirectories recursively.",
+      "task": "List recursively from the current directory.",
+      "expectedCommand": "ls -R",
+      "successMessage": "Full depth mapped. Structure clear.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "missions": {
+            "type": "directory",
+            "files": {
+            },
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "missions": {
+            "type": "directory",
+            "files": {
+            },
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "title": "Verify Position",
+      "story": "After navigation, confirm your coordinates.",
+      "task": "Print your working directory.",
+      "expectedCommand": "pwd",
+      "successMessage": "Position verified. Path confirmed.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      }
+    },
+    {
+      "id": 12,
+      "title": "Return Home",
+      "story": "Head back to your home base.",
+      "task": "Use cd with no arguments to go home.",
+      "expectedCommand": "cd",
+      "successMessage": "Home reached. Intelligence delivered.",
+      "initialState": {
+        "currentDirectory": "/home/recruit/missions",
+        "files": {}
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      }
+    },
+    {
+      "id": 13,
+      "title": "Establish Outpost",
+      "story": "Create a new directory for staging.",
+      "task": "Create a directory named outpost.",
+      "expectedCommand": "mkdir outpost",
+      "successMessage": "Outpost established. Structure begins.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "outpost": { "type": "directory", "files": {} }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "title": "Build Deep",
+      "story": "Construct nested infrastructure in one go.",
+      "task": "Create a deep path jungle/deep/camp with parents.",
+      "expectedCommand": "mkdir -p jungle/deep/camp",
+      "successMessage": "Path hierarchy built. Efficiency achieved.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "jungle": { "type": "directory", "files": { "deep": { "type": "directory", "files": { "camp": { "type": "directory", "files": {} } } } } }
+        }
+      }
+    },
+    {
+      "id": 15,
+      "title": "Seed the Data",
+      "story": "Create an empty file to hold future intel.",
+      "task": "Create a file named seed.txt.",
+      "expectedCommand": "touch seed.txt",
+      "successMessage": "File manifested. Potential created.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "seed.txt": { "type": "file", "content": "" }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "title": "Traverse the Canopy",
+      "story": "Move through chained directories.",
+      "task": "Change into jungle/deep/camp.",
+      "expectedCommand": "cd jungle/deep/camp",
+      "successMessage": "Deep navigation mastered. Target reached.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "jungle": { "type": "directory", "files": { "deep": { "type": "directory", "files": { "camp": { "type": "directory", "files": {} } } } } }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit/jungle/deep/camp",
+        "files": {
+          "jungle": { "type": "directory", "files": { "deep": { "type": "directory", "files": { "camp": { "type": "directory", "files": {} } } } } }
+        }
+      }
+    },
+    {
+      "id": 17,
+      "title": "Batch Creation",
+      "story": "Create multiple files at once.",
+      "task": "Create files f1.txt and f2.txt.",
+      "expectedCommand": "touch f1.txt f2.txt",
+      "successMessage": "Batch complete. Efficiency proven.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "f1.txt": { "type": "file", "content": "" },
+          "f2.txt": { "type": "file", "content": "" }
+        }
+      }
+    },
+    {
+      "id": 18,
+      "title": "Create Docs",
+      "story": "Set up a documentation directory.",
+      "task": "Create a directory named docs.",
+      "expectedCommand": "mkdir docs",
+      "successMessage": "Mixed creation successful. Complexity managed.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "docs": { "type": "directory", "files": {} }
+        }
+      }
+    },
+    {
+      "id": 19,
+      "title": "Absolute Return",
+      "story": "Navigate using an absolute path.",
+      "task": "Change to your home directory using an absolute path.",
+      "expectedCommand": "cd /home/recruit",
+      "successMessage": "Direct path taken. No ambiguity.",
+      "initialState": {
+        "currentDirectory": "/home/recruit/jungle",
+        "files": {}
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {}
+      }
+    },
+    {
+      "id": 20,
+      "title": "Ultimate Scan",
+      "story": "Everything, everywhere, all at once.",
+      "task": "List all files with details recursively.",
+      "expectedCommand": "ls -laR",
+      "successMessage": "Jungle fully mapped. Nothing missed.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          ".hidden": { "type": "file", "content": "dot" },
+          "data": { "type": "directory", "files": { "logs": { "type": "directory", "files": {} } } }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          ".hidden": { "type": "file", "content": "dot" },
+          "data": { "type": "directory", "files": { "logs": { "type": "directory", "files": {} } } }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Basic Reconnaissance",
+      "story": "We need to see what we're working with. Survey the contents of your current directory.",
+      "task": "List the contents of your current directory.",
+      "expectedCommand": "ls",
+      "successMessage": "Good. A quick scan of your surroundings is essential for mission success.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "missions": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Shadow Files",
+      "story": "ControlOS hides critical files using a simple trick - making them invisible to basic scans. Let's find them all.",
+      "task": "List all files in the current directory, including hidden ones.",
+      "expectedCommand": "ls -a",
+      "successMessage": "Perfect! You've uncovered the hidden files. Files starting with '.' are invisible to standard scans.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          ".secret": {
+            "type": "file",
+            "content": "Hidden intelligence data",
+            "permissions": "-rw-------",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 512
+          },
+          ".config": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "training.txt": {
+            "type": "file",
+            "content": "Welcome to Terminal Tribe training program.",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          ".secret": {
+            "type": "file",
+            "content": "Hidden intelligence data",
+            "permissions": "-rw-------",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 512
+          },
+          ".config": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Deep Intel",
+      "story": "We need more detailed information about these files to assess potential security risks.",
+      "task": "Get a detailed listing of all files showing permissions, ownership, and sizes.",
+      "expectedCommand": "ls -l",
+      "successMessage": "Excellent analysis! This detailed view gives us crucial intelligence about file attributes.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "intel.txt": {
+            "type": "file",
+            "content": "Mission briefing data",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "secure": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "intel.txt": {
+            "type": "file",
+            "content": "Mission briefing data",
+            "permissions": "-rw-r--r--",
+            "owner": "recruit",
+            "group": "tribe",
+            "size": 1024
+          },
+          "secure": {
+            "type": "directory",
+            "files": {},
+            "permissions": "drwxr-xr-x",
+            "owner": "recruit",
+            "group": "tribe"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "levels": [
+    {
+      "id": 41,
+      "title": "Current Directory Reference",
+      "story": "Sometimes the answer lies right where you are. Acknowledge your current position.",
+      "task": "Refer to the current directory explicitly.",
+      "expectedCommand": "cd .",
+      "successMessage": "You remain in the current directory, ever aware of your surroundings."
+    },
+    {
+      "id": 42,
+      "title": "Directory Creation Redux",
+      "story": "Set up multiple new bases swiftly, including any required parent directories.",
+      "task": "Create multiple directories at once, ensuring all parent directories exist.",
+      "expectedCommand": "mkdir -p outpost/alpha/data",
+      "successMessage": "Outposts established efficiently."
+    },
+    {
+      "id": 43,
+      "title": "Safe Duplication",
+      "story": "Create backups of crucial directories without missing any files.",
+      "task": "Copy directories and their contents recursively.",
+      "expectedCommand": "cp -r source_dir backup_dir",
+      "successMessage": "Directories copied safely. Backups are secured."
+    },
+    {
+      "id": 44,
+      "title": "Code Rename",
+      "story": "For security, rename 'projectX' to 'projectY'.",
+      "task": "Rename a file or directory.",
+      "expectedCommand": "mv projectX projectY",
+      "successMessage": "Project code name updated successfully."
+    },
+    {
+      "id": 45,
+      "title": "Forced Removal",
+      "story": "Eliminate all traces of 'virus_scan' directories without any prompts.",
+      "task": "Remove directories and their contents forcefully.",
+      "expectedCommand": "rm -rf virus_scan",
+      "successMessage": "All traces removed silently and effectively."
+    },
+    {
+      "id": 46,
+      "title": "Clean Sweep",
+      "story": "Remove empty temporary directories to tidy up our file system.",
+      "task": "Remove empty directories named temp_empty.",
+      "expectedCommand": "rmdir temp_empty",
+      "successMessage": "Empty directories removed. System is cleaner now."
+    },
+    {
+      "id": 47,
+      "title": "Hard Link Verification",
+      "story": "Ensure that 'config_link' is a hard link to 'config_file'. Verify their connection.",
+      "task": "Check if two files are hard linked.",
+      "expectedCommand": "ls -i config_file config_link",
+      "successMessage": "Inspection complete. Entries listed with inode numbers.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "config_file": { "type": "file", "content": "cfg" },
+          "config_link": { "type": "file", "content": "cfg" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "config_file": { "type": "file", "content": "cfg" },
+          "config_link": { "type": "file", "content": "cfg" }
+        }
+      }
+    },
+    {
+      "id": 48,
+      "title": "Dangling Links",
+      "story": "Identify any symbolic links that are no longer valid.",
+      "task": "Find a symbolic link that points to a non-existing file.",
+      "expectedCommand": "ls -l",
+      "successMessage": "Dangling symbolic links have been identified."
+    },
+    {
+      "id": 49,
+      "title": "Physical Navigation",
+      "story": "Navigate using the actual directory structure, ignoring any symbolic links.",
+      "task": "Change directories without following symbolic links.",
+      "expectedCommand": "cd -P /home/recruit",
+      "successMessage": "Navigated physically to the specified directory.",
+      "initialState": {
+        "currentDirectory": "/home/recruit/docs_link",
+        "files": {
+          "docs": { "type": "directory", "files": {} },
+          "docs_link": { "type": "symlink", "target": "docs", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "docs": { "type": "directory", "files": {} },
+          "docs_link": { "type": "symlink", "target": "docs", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+        }
+      }
+    },
+    {
+      "id": 50,
+      "title": "Alpha Patterns",
+      "story": "List all files that start with an alphabetic character.",
+      "task": "Use pattern matching for alphabetic characters.",
+      "expectedCommand": "ls [[:alpha:]]*",
+      "successMessage": "Alphabetic files listed successfully."
+    },
+    {
+      "id": 51,
+      "title": "Lowercase Files",
+      "story": "Find all files that begin with a lowercase letter.",
+      "task": "Match files starting with lowercase letters.",
+      "expectedCommand": "ls [[:lower:]]*",
+      "successMessage": "Lowercase-named files have been found."
+    },
+    {
+      "id": 52,
+      "title": "Uppercase Directories",
+      "story": "Access directories starting with uppercase letters—they may contain important protocols.",
+      "task": "List directories starting with uppercase letters.",
+      "expectedCommand": "ls -d [[:upper:]]*",
+      "successMessage": "Uppercase directories are now listed."
+    },
+    {
+      "id": 53,
+      "title": "Alphanumeric Search",
+      "story": "Compile a list of files that contain either letters or numbers.",
+      "task": "Match files with alphanumeric characters.",
+      "expectedCommand": "ls *[[:alnum:]]*",
+      "successMessage": "Files with letters or numbers have been compiled."
+    },
+    {
+      "id": 54,
+      "title": "Whitespace Files",
+      "story": "Identify files that have whitespace in their names—they might be suspicious.",
+      "task": "List files matching whitespace characters.",
+      "expectedCommand": "ls *[[:space:]]*",
+      "successMessage": "Files with whitespace detected."
+    },
+    {
+      "id": 55,
+      "title": "Punctuated Files",
+      "story": "Locate files that include punctuation in their names.",
+      "task": "Match files with punctuation characters.",
+      "expectedCommand": "ls *[[:punct:]]*",
+      "successMessage": "Punctuated files located."
+    },
+    {
+      "id": 56,
+      "title": "User Homes",
+      "story": "Access the home directory of user 'agent47' to retrieve sensitive data.",
+      "task": "Use tilde expansion for a specific user.",
+      "expectedCommand": "cd ~agent47",
+      "successMessage": "Entered agent47's home directory.",
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "home": {
+            "type": "directory",
+            "files": {
+              "recruit": { "type": "directory", "files": {} },
+              "agent47": { "type": "directory", "files": {} }
+            }
+          }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/agent47",
+        "files": {
+          "home": {
+            "type": "directory",
+            "files": {
+              "recruit": { "type": "directory", "files": {} },
+              "agent47": { "type": "directory", "files": {} }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": 57,
+      "title": "File Series Creation",
+      "story": "Generate files for phases 1 to 5 of the operation.",
+      "task": "Create files named phase1.txt to phase5.txt using brace expansion.",
+      "expectedCommand": "touch phase{1..5}.txt",
+      "successMessage": "Files for all phases have been created."
+    },
+    {
+      "id": 58,
+      "title": "Variable Review",
+      "story": "Double-check the code name stored in our variable to ensure mission integrity.",
+      "task": "Display the value of the variable MISSION_CODE.",
+      "expectedCommand": "echo ${MISSION_CODE}",
+      "successMessage": "Mission code confirmed as '${MISSION_CODE}'."
+    },
+    {
+      "id": 59,
+      "title": "Dollar Sign Protection",
+      "story": "Document the finance report without variable expansion interfering.",
+      "task": "Echo a string containing a dollar sign without triggering variable expansion.",
+      "expectedCommand": "echo \"\\$1000 allocated for equipment\"",
+      "successMessage": "Finance report documented accurately."
+    },
+    {
+      "id": 60,
+      "title": "Non-existent User Check",
+      "story": "Attempt to access the home directory of a user we suspect doesn't exist to test system responses.",
+      "task": "Expand ~nonexistentuser in the shell.",
+      "expectedCommand": "echo ~nonexistentuser",
+      "successMessage": "Result: ~nonexistentuser. User does not exist, as suspected."
+    }
+  ]
+}
