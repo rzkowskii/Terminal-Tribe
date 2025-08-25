@@ -30,6 +30,28 @@ export const echo: BuiltinCommand = {
   }
 };
 
+export const cat: BuiltinCommand = {
+  meta: { name: 'cat', description: 'Concatenate files and print on the standard output' },
+  run: async (ctx, args) => {
+    const { positionals } = parseFlags(args);
+    if (positionals.length === 0) {
+      // pass through stdin if available
+      // @ts-ignore add stdin in ExecutionContext
+      const input = (ctx as any).stdin || '';
+      return { output: input, status: 'success' };
+    }
+    let out = '';
+    for (const p of positionals) {
+      const abs = fs.resolvePath(ctx.currentState.currentDirectory, p);
+      const node = fs.getNodeAtPath(ctx.currentState, abs);
+      if (!node) return { output: `cat: ${p}: No such file or directory`, status: 'error' };
+      if (!isFileNode(node)) return { output: `cat: ${p}: Not a file`, status: 'error' };
+      out += node.content;
+    }
+    return { output: out, status: 'success', newState: ctx.currentState };
+  }
+};
+
 export const clear: BuiltinCommand = {
   meta: { name: 'clear', description: 'Clear the terminal screen' },
   run: async () => ({ output: '', status: 'success', effects: { clearHistory: true } })

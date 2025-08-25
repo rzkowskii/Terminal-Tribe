@@ -2,13 +2,18 @@ import React, { useState, useRef, useEffect } from 'react';
 import useLevelStore from '../stores/levelStore';
 import useTerminalStore from '../stores/terminalStore';
 import { executeCommand } from '../commands';
+import QuickActions from './QuickActions';
+import TerminalFrame from './TerminalFrame';
+import useUiStore from '../stores/uiStore';
+import { evaluateSolution } from '../services/solutionPolicy';
+import { extractOutputTokens } from '../utils/tokenizer';
 
 const Terminal: React.FC = () => {
   const [input, setInput] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
 
-  const { commandHistory, addToHistory, clearHistory, getPrevHistory, getNextHistory, complete } = useTerminalStore();
+  const { commandHistory, addToHistory, clearHistory, getPrevHistory, getNextHistory, complete, isearchOpen, openISearch, closeISearch, updateISearch, isearchResult } = useTerminalStore();
   const { 
     validateCommand,
     validateState,
@@ -16,6 +21,7 @@ const Terminal: React.FC = () => {
     setCurrentFileSystem,
     currentFileSystem
   } = useLevelStore();
+  const ui = useUiStore();
 
   useEffect(() => {
     if (inputRef.current) {
@@ -39,14 +45,24 @@ const Terminal: React.FC = () => {
       if (next !== null) setInput(next);
       e.preventDefault();
     } else if (e.key === 'Tab') {
-      const parts = input.trim().split(/\s+/);
-      const first = parts[0] || '';
-      const completion = complete(first);
-      if (completion) {
-        parts[0] = completion;
-        setInput(parts.join(' '));
-      }
+      const completion = complete(input, e.shiftKey ? -1 : 1);
+      if (completion) setInput(completion);
       e.preventDefault();
+    } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'r') {
+      openISearch();
+      e.preventDefault();
+    } else if (e.key === '?') {
+      // Inline docs: open Codex for the token at caret
+      const el = e.target as HTMLInputElement;
+      const pos = el.selectionStart || 0;
+      const left = input.slice(0, pos);
+      const tokens = left.split(/\s+/);
+      const token = tokens[tokens.length - 1] || input.split(/\s+/)[0] || '';
+      if (token) {
+        ui.setSelectedCodexKey(token);
+        ui.setShowCodex(true);
+        e.preventDefault();
+      }
     }
   };
 
@@ -70,18 +86,29 @@ const Terminal: React.FC = () => {
       });
     }
 
+    let accepted = false;
     if (validateCommand(input) && result.status === 'success') {
-      if (!result.newState || validateState(result.newState)) {
-        completeLevel();
+      accepted = !result.newState || validateState(result.newState);
+    } else if (ui.featureFlags.solutionPolicy && result.status !== 'error') {
+      const { levels, currentLevel } = useLevelStore.getState();
+      const lvl = levels.find(l => l.id === currentLevel);
+      if (lvl) {
+        const evalRes = evaluateSolution({ rawCommand: input, stdout: result.output, stderr: result.status === 'error' ? result.output : '', fsBefore: currentFileSystem, fsAfter: result.newState || currentFileSystem, level: lvl });
+        accepted = evalRes.success;
       }
     }
+    if (accepted) completeLevel();
+
+    // Token chips hint: (future) could display elsewhere; we compute and ignore here
+    const tokens = extractOutputTokens(result.output || '');
+    void tokens;
 
     setInput('');
   };
 
   return (
-    <div className="terminal-window text-terminal-text p-4 rounded-xl shadow-xl font-mono border border-white/10">
-      <div ref={outputRef} className="h-96 overflow-y-auto mb-4 pr-1" aria-live="polite">
+    <TerminalFrame title="ARCHIVE TERMINAL v2.847">
+      <div ref={outputRef} className="h-96 overflow-y-auto mb-4 pr-1 terminal-window text-terminal-text font-mono" aria-live="polite">
         {commandHistory.map((entry, index) => (
           <div key={index} className="mb-2">
             <div className="flex items-start gap-2">
@@ -108,11 +135,32 @@ const Terminal: React.FC = () => {
                 } whitespace-pre-wrap`}>
                   {entry.output}
                 </div>
+                
+              </div>
+            )}
+            {entry.output && ui.featureFlags.deepLinks && (
+              <div className="flex flex-wrap gap-1 mt-1 ml-6">
+                {extractOutputTokens(entry.output).map((tok) => (
+                  <button
+                    key={tok}
+                    className="text-[10px] bg-white/5 hover:bg-white/10 border border-white/10 px-1.5 py-0.5 rounded"
+                    aria-label={`Open Codex for ${tok}`}
+                    onClick={() => { ui.setSelectedCodexKey(tok); ui.setShowCodex(true); }}
+                  >{tok}</button>
+                ))}
               </div>
             )}
           </div>
         ))}
       </div>
+      {isearchOpen && (
+        <div className="mb-2 text-xs px-2 py-1 rounded border border-white/10 bg-white/5 flex items-center gap-2">
+          <span className="text-terminal-info">(reverse‑i‑search)</span>
+          <input className="flex-1 bg-transparent outline-none" autoFocus onChange={(e) => updateISearch(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { if (isearchResult) setInput(isearchResult); closeISearch(); e.preventDefault(); } if (e.key === 'Escape') { closeISearch(); e.preventDefault(); } }} placeholder="Type to search history…" />
+          <button className="text-terminal-text/70" onClick={() => closeISearch()} type="button">Cancel</button>
+          {isearchResult && <span className="text-terminal-success">{isearchResult}</span>}
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="flex w-full items-center gap-2">
         <span className="terminal-prompt">
           {(() => {
@@ -130,9 +178,12 @@ const Terminal: React.FC = () => {
           className="terminal-input flex-1 bg-transparent outline-none"
           placeholder="Type a command and press Enter..."
         />
-        <div className="text-xs text-terminal-text/60 whitespace-nowrap">↑ history • Tab completion • Enter to run</div>
+        {ui.showTerminalHints && (
+          <div className="text-xs text-terminal-text/60 whitespace-nowrap">↑ history • Tab completion • Enter to run • ? for docs</div>
+        )}
       </form>
-    </div>
+      <QuickActions />
+    </TerminalFrame>
   );
 };
 

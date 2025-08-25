@@ -1,6 +1,7 @@
 import React from 'react';
 import useUiStore from '../stores/uiStore';
 import { ACT_INTRO } from '../content/narrative';
+import FocusTrap from './FocusTrap';
 
 const ACT_COPY: Record<number, { title: string; body: string }> = {
   1: { title: 'Act I — Outpost Ruins', body: 'The wind gnaws at the concrete shells. Beneath the dust, terminals still blink. The Tribe needs a keeper who can wake them.' },
@@ -19,13 +20,15 @@ const ActIntroModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="act-intro-title">
       <div className="absolute inset-0 bg-black/70" onClick={close} />
-      <div className="relative z-10 max-w-2xl mx-4 rounded-xl border border-white/10 bg-terminal-bg/90 backdrop-blur p-8 text-terminal-text shadow-2xl">
-        <h2 id="act-intro-title" className="text-2xl font-bold mb-3">{copy.title}</h2>
-        <p className="text-terminal-text/90 mb-4 whitespace-pre-wrap">{introBody || copy.body}</p>
-        <div className="flex justify-end">
-          <button onClick={close} className="bg-terminal-prompt/20 hover:bg-terminal-prompt/30 text-terminal-prompt px-4 py-2 rounded border border-terminal-prompt/30">Continue</button>
+      <FocusTrap onEscape={close}>
+        <div className="relative z-10 max-w-2xl mx-4 rounded-xl border border-white/10 bg-terminal-bg/90 backdrop-blur p-8 text-terminal-text shadow-2xl">
+          <h2 id="act-intro-title" className="text-2xl font-bold mb-3">{copy.title}</h2>
+          <p className="text-terminal-text/90 mb-4 whitespace-pre-wrap">{introBody || copy.body}</p>
+          <div className="flex justify-end">
+            <button onClick={close} className="bg-terminal-prompt/20 hover:bg-terminal-prompt/30 text-terminal-prompt px-4 py-2 rounded border border-terminal-prompt/30">Continue</button>
+          </div>
         </div>
-      </div>
+      </FocusTrap>
     </div>
   );
 };

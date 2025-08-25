@@ -74,21 +74,35 @@ const normalizeLevel = (raw: any): Level => {
     story: raw.story,
     task: raw.task,
     expectedCommand: raw.expectedCommand,
+    acceptedCommands: raw.acceptedCommands,
+    expectedOutput: raw.expectedOutput,
+    postConditions: raw.postConditions,
+    rubric: raw.rubric,
     successMessage: raw.successMessage,
     initialState: normalizedInitial,
     expectedState: normalizedExpected,
     act: raw.act,
     biome: raw.biome,
+    faction: raw.faction,
     loreIntro: raw.loreIntro,
     radioChatter: raw.radioChatter,
     successLore: raw.successLore,
     hint: raw.hint,
-    conceptKeys: raw.conceptKeys || conceptFromCommand(raw.expectedCommand || '')
+    conceptKeys: raw.conceptKeys || conceptFromCommand(raw.expectedCommand || ''),
+    difficulty: raw.difficulty,
+    estTimeMin: raw.estTimeMin,
   };
   if (!n.act || !n.biome) {
     const ab = actBiomeForId(n.id);
     n.act = ab.act;
     n.biome = ab.biome;
+  }
+  if (!n.difficulty) {
+    const len = (n.expectedCommand || '').length;
+    n.difficulty = len < 8 ? 'easy' : len < 18 ? 'medium' : 'hard';
+  }
+  if (typeof n.estTimeMin !== 'number') {
+    n.estTimeMin = Math.max(1, Math.min(10, Math.ceil(((n.expectedCommand || '').split(/\s+/).length) / 2)));
   }
   return n;
 };
@@ -105,25 +119,30 @@ export const loadLevels = (): Level[] => {
 
 export default loadLevels;
 
-const validateLevels = (levels: Level[]): Level[] => {
+export const validateLevels = (levels: Level[]): Level[] => {
   // Ensure levels are in order
   levels.sort((a, b) => a.id - b.id);
 
   // Check for missing or duplicate levels
-  const levelIds = new Set(levels.map(level => level.id));
-  const expectedIds = new Set(Array.from({ length: levels.length }, (_, i) => i + 1));
+  const idCounts: Record<number, number> = {};
+  for (const l of levels) {
+    idCounts[l.id] = (idCounts[l.id] || 0) + 1;
+  }
+  const duplicateIds = Object.entries(idCounts)
+    .filter(([, count]) => (count as number) > 1)
+    .map(([id]) => Number(id))
+    .sort((a, b) => a - b);
 
-  const missingIds = [...expectedIds].filter(id => !levelIds.has(id));
-  const duplicateIds = [...levelIds].filter(
-    (id, index, arr) => arr.indexOf(id) !== index
-  );
+  const maxId = levels.length > 0 ? Math.max(...levels.map(l => l.id)) : 0;
+  const existingIds = new Set(levels.map(l => l.id));
+  const missingIds = Array.from({ length: maxId }, (_, i) => i + 1).filter(id => !existingIds.has(id));
 
   if (missingIds.length > 0) {
     console.warn('Missing level IDs:', missingIds);
   }
 
   if (duplicateIds.length > 0) {
-    console.warn('Duplicate level IDs:', duplicateIds);
+    console.error('Duplicate level IDs:', duplicateIds);
   }
 
   return levels;

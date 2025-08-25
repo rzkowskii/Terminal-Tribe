@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import useLevelStore from '../stores/levelStore';
 import FsTree from './FsTree';
+import useUiStore from '../stores/uiStore';
 
 const LevelDisplay: React.FC = () => {
-  const { currentLevel, levels, completedLevels, resetLevel, goToNextLevel } = useLevelStore();
+  const { currentLevel, levels, completedLevels, resetLevel, goToNextLevel, goToPrevLevel } = useLevelStore();
   const currentLevelData = levels.find(l => l.id === currentLevel);
-  const [showHint, setShowHint] = useState(false);
+  const { showHint, toggleHint } = useUiStore();
   const total = levels.length || 0;
   const completedCount = completedLevels.size;
   const progress = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+  const hintText = useMemo(() => currentLevelData?.hint || 'Consider flags and relative/absolute paths.', [currentLevelData]);
 
   if (!currentLevelData) {
     return <div>Loading...</div>;
@@ -33,33 +35,38 @@ const LevelDisplay: React.FC = () => {
       </div>
 
       <div className="mb-4">
-        <h3 className="text-lg font-semibold text-terminal-info">Story</h3>
-        <p className="italic text-terminal-text/80">{currentLevelData.story}</p>
+        <div className="flex items-start justify-between">
+          <div className="flex-1 mr-4">
+            <h3 className="text-lg font-semibold text-terminal-info">Story</h3>
+            <p className="italic text-terminal-text/80">{currentLevelData.story}</p>
+          </div>
+          <div className="text-right text-xs text-terminal-text/70 min-w-[8rem]">
+            {currentLevelData.biome && <div>{currentLevelData.biome.toUpperCase()}</div>}
+            {typeof currentLevelData.estTimeMin === 'number' && <div>~{currentLevelData.estTimeMin}m</div>}
+            {currentLevelData.difficulty && <div>{currentLevelData.difficulty}</div>}
+          </div>
+        </div>
       </div>
 
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-terminal-info">Current Task</h3>
         <p className="text-terminal-success">{currentLevelData.task}</p>
         <button
-          onClick={() => setShowHint(v => !v)}
+          onClick={toggleHint}
           className="mt-3 text-sm text-terminal-prompt hover:text-terminal-prompt/90"
         >
           {showHint ? 'Hide hint' : 'Show hint'}
         </button>
         {showHint && (
           <div className="mt-2 text-sm text-terminal-text/90">
-            Hint: try commands and flags relevant to this task. Use <span className="text-terminal-prompt">help</span> to discover options.
+            Hint: {hintText}
           </div>
         )}
       </div>
 
       <div className="flex items-center gap-2">
-        <button
-          onClick={() => resetLevel()}
-          className="bg-white/5 hover:bg-white/10 text-terminal-text font-semibold py-2 px-4 rounded border border-white/10"
-        >
-          Reset Level
-        </button>
+        <button onClick={() => goToPrevLevel()} disabled={currentLevel <= 1} className="bg-white/5 hover:bg-white/10 disabled:opacity-50 text-terminal-text font-semibold py-2 px-4 rounded border border-white/10">Previous</button>
+        <button onClick={() => resetLevel()} className="bg-white/5 hover:bg-white/10 text-terminal-text font-semibold py-2 px-4 rounded border border-white/10">Reset</button>
         <button
           onClick={() => goToNextLevel()}
           className="bg-terminal-prompt/20 hover:bg-terminal-prompt/30 text-terminal-prompt font-semibold py-2 px-4 rounded border border-terminal-prompt/30"

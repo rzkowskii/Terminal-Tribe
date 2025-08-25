@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { PROLOGUE } from '../content/narrative';
+import FocusTrap from './FocusTrap';
 
 interface Props {
   onStart: () => void;
@@ -38,6 +39,7 @@ const PrologueModal: React.FC<Props> = ({ onStart }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="prologue-title">
       <div className="absolute inset-0 bg-black/70" />
+      <FocusTrap initialFocusRef={startRef} onEscape={onStart}>
       <div ref={dialogRef} className="relative z-10 max-w-2xl mx-4 rounded-xl border border-white/10 bg-terminal-bg/90 backdrop-blur p-8 text-terminal-text shadow-2xl">
         <h2 id="prologue-title" className="text-2xl font-bold mb-3">Prologue</h2>
         <p className="text-terminal-text/90 mb-4 whitespace-pre-wrap">{PROLOGUE}</p>
@@ -45,6 +47,7 @@ const PrologueModal: React.FC<Props> = ({ onStart }) => {
           <button ref={startRef} onClick={onStart} className="bg-terminal-prompt/20 hover:bg-terminal-prompt/30 text-terminal-prompt px-4 py-2 rounded border border-terminal-prompt/30">Begin</button>
         </div>
       </div>
+      </FocusTrap>
     </div>
   );
 };

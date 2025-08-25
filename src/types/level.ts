@@ -4,18 +4,26 @@ export interface Level {
   story: string;
   task: string;
   expectedCommand: string;
+  acceptedCommands?: string[]; // Accept simple strings or pipeline equivalents via SolutionPolicy
+  expectedOutput?: string;
+  postConditions?: Record<string, any>;
+  rubric?: { efficiency?: string; safety?: string; style?: string };
   successMessage: string;
   initialState: FileSystemState;  // Made required to ensure type safety
   expectedState: FileSystemState; // Made required to ensure type safety
   // Optional narrative fields (populated by loader if missing)
   act?: number;
   biome?: 'outpost' | 'jungle' | 'arctic' | 'archipelago' | 'lunar';
+  faction?: 'scribes' | 'circuit' | 'null';
   loreIntro?: string;
   radioChatter?: string;
   successLore?: string;
   hint?: string;
   // Concept keys for codex unlocking
   conceptKeys?: string[];
+  // Optional meta data used for previews
+  difficulty?: 'easy' | 'medium' | 'hard';
+  estTimeMin?: number;
 }
 
 export interface DirectoryNode {

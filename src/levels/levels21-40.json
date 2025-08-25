@@ -239,7 +239,10 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "old_logs": { "type": "directory", "files": {} }
+          "old_logs": {
+            "type": "directory",
+            "files": {}
+          }
         }
       },
       "expectedState": {
@@ -260,7 +263,10 @@
           "cache": {
             "type": "directory",
             "files": {
-              "a.txt": { "type": "file", "content": "a" }
+              "a.txt": {
+                "type": "file",
+                "content": "a"
+              }
             }
           }
         }
@@ -280,14 +286,23 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "master": { "type": "file", "content": "core" }
+          "master": {
+            "type": "file",
+            "content": "core"
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "master": { "type": "file", "content": "core" },
-          "master_copy": { "type": "file", "content": "core" }
+          "master": {
+            "type": "file",
+            "content": "core"
+          },
+          "master_copy": {
+            "type": "file",
+            "content": "core"
+          }
         }
       }
     },
@@ -301,14 +316,26 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "shared": { "type": "directory", "files": {} }
+          "shared": {
+            "type": "directory",
+            "files": {}
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "shared": { "type": "directory", "files": {} },
-          "shared_link": { "type": "symlink", "target": "shared", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+          "shared": {
+            "type": "directory",
+            "files": {}
+          },
+          "shared_link": {
+            "type": "symlink",
+            "target": "shared",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
         }
       }
     },
@@ -322,7 +349,10 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "lock.bin": { "type": "file", "content": "x" }
+          "lock.bin": {
+            "type": "file",
+            "content": "x"
+          }
         }
       },
       "expectedState": {
@@ -340,15 +370,33 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "shared": { "type": "directory", "files": {} },
-          "shared_link": { "type": "symlink", "target": "shared", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+          "shared": {
+            "type": "directory",
+            "files": {}
+          },
+          "shared_link": {
+            "type": "symlink",
+            "target": "shared",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "shared": { "type": "directory", "files": {} },
-          "shared_link": { "type": "symlink", "target": "shared", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+          "shared": {
+            "type": "directory",
+            "files": {}
+          },
+          "shared_link": {
+            "type": "symlink",
+            "target": "shared",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
         }
       }
     },
@@ -362,7 +410,13 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "dangling": { "type": "symlink", "target": "/no/such/path", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+          "dangling": {
+            "type": "symlink",
+            "target": "/no/such/path",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
         }
       },
       "expectedState": {
@@ -380,15 +434,33 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "docs": { "type": "directory", "files": {} },
-          "docs_link": { "type": "symlink", "target": "docs", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+          "docs": {
+            "type": "directory",
+            "files": {}
+          },
+          "docs_link": {
+            "type": "symlink",
+            "target": "docs",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit/docs_link",
         "files": {
-          "docs": { "type": "directory", "files": {} },
-          "docs_link": { "type": "symlink", "target": "docs", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+          "docs": {
+            "type": "directory",
+            "files": {}
+          },
+          "docs_link": {
+            "type": "symlink",
+            "target": "docs",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
         }
       }
     },
@@ -402,15 +474,33 @@
       "initialState": {
         "currentDirectory": "/home/recruit/docs_link",
         "files": {
-          "docs": { "type": "directory", "files": {} },
-          "docs_link": { "type": "symlink", "target": "docs", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+          "docs": {
+            "type": "directory",
+            "files": {}
+          },
+          "docs_link": {
+            "type": "symlink",
+            "target": "docs",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit/docs_link",
         "files": {
-          "docs": { "type": "directory", "files": {} },
-          "docs_link": { "type": "symlink", "target": "docs", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+          "docs": {
+            "type": "directory",
+            "files": {}
+          },
+          "docs_link": {
+            "type": "symlink",
+            "target": "docs",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
         }
       }
     },
@@ -424,8 +514,14 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "a.log": { "type": "file", "content": "1" },
-          "b.log": { "type": "file", "content": "2" }
+          "a.log": {
+            "type": "file",
+            "content": "1"
+          },
+          "b.log": {
+            "type": "file",
+            "content": "2"
+          }
         }
       },
       "expectedState": {
@@ -459,14 +555,23 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "data.txt": { "type": "file", "content": "intel" }
+          "data.txt": {
+            "type": "file",
+            "content": "intel"
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "data.txt": { "type": "file", "content": "intel" },
-          "backup.txt": { "type": "file", "content": "intel" }
+          "data.txt": {
+            "type": "file",
+            "content": "intel"
+          },
+          "backup.txt": {
+            "type": "file",
+            "content": "intel"
+          }
         }
       }
     },
@@ -480,14 +585,38 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "source_dir": { "type": "directory", "files": { "file1": { "type": "file", "content": "x" } } }
+          "source_dir": {
+            "type": "directory",
+            "files": {
+              "file1": {
+                "type": "file",
+                "content": "x"
+              }
+            }
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "source_dir": { "type": "directory", "files": { "file1": { "type": "file", "content": "x" } } },
-          "backup_dir": { "type": "directory", "files": { "file1": { "type": "file", "content": "x" } } }
+          "source_dir": {
+            "type": "directory",
+            "files": {
+              "file1": {
+                "type": "file",
+                "content": "x"
+              }
+            }
+          },
+          "backup_dir": {
+            "type": "directory",
+            "files": {
+              "file1": {
+                "type": "file",
+                "content": "x"
+              }
+            }
+          }
         }
       }
     },
@@ -501,13 +630,19 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "old.log": { "type": "file", "content": "logs" }
+          "old.log": {
+            "type": "file",
+            "content": "logs"
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "new.log": { "type": "file", "content": "logs" }
+          "new.log": {
+            "type": "file",
+            "content": "logs"
+          }
         }
       }
     },
@@ -521,14 +656,28 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "new.log": { "type": "file", "content": "logs" },
-          "logs": { "type": "directory", "files": {} }
+          "new.log": {
+            "type": "file",
+            "content": "logs"
+          },
+          "logs": {
+            "type": "directory",
+            "files": {}
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "logs": { "type": "directory", "files": { "new.log": { "type": "file", "content": "logs" } } }
+          "logs": {
+            "type": "directory",
+            "files": {
+              "new.log": {
+                "type": "file",
+                "content": "logs"
+              }
+            }
+          }
         }
       }
     }

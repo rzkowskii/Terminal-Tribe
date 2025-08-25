@@ -5,6 +5,7 @@ import loadLevels from '../utils/levelLoader';
 import { validateCommand as validateExactCommand, validateFileSystemState } from '../utils/levelValidator';
 import useUIStore from './uiStore';
 import useProgressStore from './progressStore';
+import useSkillStore from './skillStore';
 
 interface LevelStore {
   currentLevel: number;
@@ -15,6 +16,8 @@ interface LevelStore {
   setActFilter: (act?: number) => void;
   setCurrentLevel: (level: number) => void;
   goToNextLevel: () => void;
+  goToPrevLevel: () => void;
+  goToLevel: (level: number) => void;
   setCurrentFileSystem: (state: FileSystemState) => void;
   resetCurrentLevel: () => void;
   resetLevel: () => void;
@@ -26,7 +29,7 @@ interface LevelStore {
 
 const useLevelStore = create<LevelStore>()(persist((set, get) => ({
   currentLevel: 1,
-  levels: loadLevels(),
+  levels: [],
   completedLevels: new Set<number>(),
   currentFileSystem: {
     currentDirectory: '/home/recruit',
@@ -56,6 +59,29 @@ const useLevelStore = create<LevelStore>()(persist((set, get) => ({
       if (!levelData) return state as any;
       return {
         currentLevel: next,
+        currentFileSystem: levelData.initialState || defaultFileSystemState
+      };
+    });
+  },
+
+  goToPrevLevel: () => {
+    set((state) => {
+      const prev = Math.max(1, state.currentLevel - 1);
+      const levelData = state.levels.find(l => l.id === prev);
+      if (!levelData) return state as any;
+      return {
+        currentLevel: prev,
+        currentFileSystem: levelData.initialState || defaultFileSystemState
+      };
+    });
+  },
+
+  goToLevel: (level: number) => {
+    set((state) => {
+      const levelData = state.levels.find(l => l.id === level);
+      if (!levelData) return state as any;
+      return {
+        currentLevel: level,
         currentFileSystem: levelData.initialState || defaultFileSystemState
       };
     });
@@ -92,7 +118,7 @@ const useLevelStore = create<LevelStore>()(persist((set, get) => ({
     const { currentLevel, levels } = get();
     const levelData = levels.find(l => l.id === currentLevel);
     if (!levelData) return false;
-    return validateExactCommand(command, levelData.expectedCommand);
+    return validateExactCommand(command, levelData.expectedCommand, levelData.acceptedCommands);
   },
 
   validateState: (state: FileSystemState) => {
@@ -106,18 +132,27 @@ const useLevelStore = create<LevelStore>()(persist((set, get) => ({
   completeLevel: () => {
     const ui = useUIStore.getState();
     const progress = useProgressStore.getState();
+    const skills = useSkillStore.getState();
     set((state) => ({
       completedLevels: new Set([...state.completedLevels, state.currentLevel])
     }));
-    // Unlock codex entries by concept keys
     const { levels, currentLevel } = get();
     const level = levels.find(l => l.id === currentLevel);
     const keys = level?.conceptKeys || [];
     keys.forEach(k => progress.unlockCodex(k, currentLevel));
+    // Award XP for concept keys
+    keys.forEach(k => skills.addXp(k, 5));
     const title = level?.successMessage || 'Success';
     const message = level?.successLore || 'Progress recorded.';
     const codexKey = keys[0];
-    ui.openCompletion({ title, message, codexKey });
+    // Show completion modal for non-final levels
+    if (currentLevel < (levels[levels.length - 1]?.id || 60)) {
+      const { completionOtherApproaches } = useUIStore.getState();
+      ui.openCompletion({ title, message, codexKey, otherApproaches: completionOtherApproaches });
+    } else {
+      // Final level completed
+      ui.setShowFinale(true);
+    }
   },
 
   initializeLevels: () => {

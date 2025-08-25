@@ -1,0 +1,217 @@
+.sceneViewport {
+  position: relative;
+  height: 40vh;
+  overflow: hidden;
+  border-bottom: 2px solid rgba(255,255,255,0.06);
+  background: linear-gradient(180deg, #0a0e1a 0%, #1a1f2e 100%);
+}
+
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 255, 136, 0.03) 2px,
+    rgba(0, 255, 136, 0.03) 4px
+  );
+  pointer-events: none;
+}
+
+.sceneSky {
+  position: absolute;
+  width: 100%;
+  height: 70%;
+  background: linear-gradient(180deg,
+    #0a0e1a 0%,
+    #1a1f2e 40%,
+    #2a2038 70%,
+    #3a2838 100%
+  );
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.9), transparent),
+    radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 60% 40%, rgba(255,255,255,0.9), transparent),
+    radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.9), transparent);
+  background-size: 350px 350px;
+  animation: twinkle 10s infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+.sceneGround {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(180deg, #1a1822 0%, #0a0810 100%);
+}
+
+.sceneGroundTop {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 50px,
+    rgba(139, 69, 19, 0.1) 50px,
+    rgba(139, 69, 19, 0.1) 100px
+  );
+}
+
+.ruinsLayer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.building {
+  position: absolute;
+  bottom: 0;
+  background: #0a0810;
+  border: 1px solid rgba(0, 255, 136, 0.1);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.building1 {
+  left: 10%;
+  width: 120px;
+  height: 140px;
+  background: linear-gradient(180deg, #12141a 0%, #0a0810 100%);
+}
+
+.building2 {
+  left: 30%;
+  width: 80px;
+  height: 180px;
+  background: linear-gradient(180deg, #15171d 0%, #0a0810 100%);
+  transform: skewX(-5deg);
+}
+
+.building3 {
+  left: 55%;
+  width: 100px;
+  height: 160px;
+  background: linear-gradient(180deg, #13151b 0%, #0a0810 100%);
+}
+
+.building3Roof {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: 20px;
+  width: 60px;
+  height: 30px;
+  background: #0a0810;
+  border-left: 2px solid rgba(0, 255, 136, 0.2);
+}
+
+.building4 {
+  right: 15%;
+  width: 140px;
+  height: 120px;
+  background: linear-gradient(180deg, #11131a 0%, #0a0810 100%);
+}
+
+.distantTower {
+  position: absolute;
+  bottom: 20%;
+  right: 5%;
+  width: 40px;
+  height: 250px;
+  background: linear-gradient(180deg, rgba(20, 25, 35, 0.6) 0%, rgba(10, 8, 16, 0.6) 100%);
+  opacity: 0.4;
+}
+
+.fogLayer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(180deg, transparent 0%, rgba(100, 100, 120, 0.1) 100%);
+  animation: fog-drift 20s infinite ease-in-out;
+}
+
+@keyframes fog-drift {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
+}
+
+.locationLabel {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 255, 136, 0.6);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #00ff88;
+}
+
+/* Biome palettes */
+.biomeOutpost .sceneSky {
+  background: linear-gradient(180deg,
+    #0a0e1a 0%, #1a1f2e 40%, #2a2038 70%, #3a2838 100%
+  );
+}
+
+.biomeJungle .sceneSky {
+  background: linear-gradient(180deg,
+    #0b1a14 0%, #0f2a1d 40%, #123926 70%, #163a2a 100%
+  );
+}
+
+.biomeArctic .sceneSky {
+  background: linear-gradient(180deg,
+    #0a1420 0%, #0f2030 40%, #12304a 70%, #0f2742 100%
+  );
+}
+
+.biomeArchipelago .sceneSky {
+  background: linear-gradient(180deg,
+    #0a1820 0%, #103040 40%, #154a5a 70%, #1a5a6a 100%
+  );
+}
+
+.biomeLunar .sceneSky {
+  background: linear-gradient(180deg,
+    #0a0814 0%, #14161f 40%, #1a1825 70%, #201828 100%
+  );
+}
+
+/* Disable effects utility */
+.noEffects .stars,
+.noEffects .fogLayer,
+.noEffects .ruinsLayer .building,
+.noEffects .ruinsLayer {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sceneViewport * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+

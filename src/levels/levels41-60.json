@@ -58,15 +58,27 @@
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "config_file": { "type": "file", "content": "cfg" },
-          "config_link": { "type": "file", "content": "cfg" }
+          "config_file": {
+            "type": "file",
+            "content": "cfg"
+          },
+          "config_link": {
+            "type": "file",
+            "content": "cfg"
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "config_file": { "type": "file", "content": "cfg" },
-          "config_link": { "type": "file", "content": "cfg" }
+          "config_file": {
+            "type": "file",
+            "content": "cfg"
+          },
+          "config_link": {
+            "type": "file",
+            "content": "cfg"
+          }
         }
       }
     },
@@ -88,15 +100,33 @@
       "initialState": {
         "currentDirectory": "/home/recruit/docs_link",
         "files": {
-          "docs": { "type": "directory", "files": {} },
-          "docs_link": { "type": "symlink", "target": "docs", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+          "docs": {
+            "type": "directory",
+            "files": {}
+          },
+          "docs_link": {
+            "type": "symlink",
+            "target": "docs",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "docs": { "type": "directory", "files": {} },
-          "docs_link": { "type": "symlink", "target": "docs", "permissions": "lrwxrwxrwx", "owner": "recruit", "group": "tribe" }
+          "docs": {
+            "type": "directory",
+            "files": {}
+          },
+          "docs_link": {
+            "type": "symlink",
+            "target": "docs",
+            "permissions": "lrwxrwxrwx",
+            "owner": "recruit",
+            "group": "tribe"
+          }
         }
       }
     },
@@ -161,8 +191,14 @@
           "home": {
             "type": "directory",
             "files": {
-              "recruit": { "type": "directory", "files": {} },
-              "agent47": { "type": "directory", "files": {} }
+              "recruit": {
+                "type": "directory",
+                "files": {}
+              },
+              "agent47": {
+                "type": "directory",
+                "files": {}
+              }
             }
           }
         }
@@ -173,8 +209,14 @@
           "home": {
             "type": "directory",
             "files": {
-              "recruit": { "type": "directory", "files": {} },
-              "agent47": { "type": "directory", "files": {} }
+              "recruit": {
+                "type": "directory",
+                "files": {}
+              },
+              "agent47": {
+                "type": "directory",
+                "files": {}
+              }
             }
           }
         }

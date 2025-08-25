@@ -335,6 +335,38 @@ export const createFile = (
   return assignInodes(newState);
 };
 
+export const writeFile = (
+  state: FileSystemState,
+  path: string,
+  content: string,
+  append: boolean = false
+): FileSystemState => {
+  const parts = getPathParts(path);
+  const fileName = parts.pop();
+  if (!fileName) throw new FileSystemError('Invalid file name');
+  const dirPath = '/' + parts.join('/');
+  const parentNode = getNodeAtPath(state, dirPath);
+  if (!parentNode || !isDirectoryNode(parentNode)) throw new FileSystemError('Parent directory does not exist');
+  const existing = parentNode.files[fileName];
+  let nextState = state;
+  if (!existing) {
+    nextState = createFile(state, path, content);
+  } else if (isFileNode(existing)) {
+    const newState = { ...state };
+    let current = newState.files;
+    for (const part of parts) {
+      const node = current[part];
+      if (!node || !isDirectoryNode(node)) throw new FileSystemError('Invalid path');
+      current = node.files;
+    }
+    current[fileName] = { ...existing, content: append ? (existing.content + content) : content } as FileNode;
+    nextState = newState;
+  } else {
+    throw new FileSystemError('Not a file');
+  }
+  return assignInodes(nextState);
+};
+
 export const createDirectory = (
   state: FileSystemState,
   path: string,
