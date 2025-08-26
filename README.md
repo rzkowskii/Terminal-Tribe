@@ -1,3 +1,5 @@
+Play it here: https://www.terminaltribe.com/
+
 # Terminal Tribe
 
 An educational, story-driven Linux terminal game. Learn shell skills by completing 60 handcrafted levels across five acts.
