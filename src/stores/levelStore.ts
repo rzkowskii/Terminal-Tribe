@@ -43,7 +43,7 @@ const useLevelStore = create<LevelStore>()(persist((set, get) => ({
   setCurrentLevel: (level: number) => {
     set((state) => {
       const levelData = state.levels.find(l => l.id === level);
-      if (!levelData) return state as any;
+      if (!levelData) return state;
 
       return {
         currentLevel: level,
@@ -56,10 +56,14 @@ const useLevelStore = create<LevelStore>()(persist((set, get) => ({
     set((state) => {
       const next = state.currentLevel + 1;
       const levelData = state.levels.find(l => l.id === next);
-      if (!levelData) return state as any;
+      if (!levelData) return state;
+      // Ensure current level is counted as completed when advancing manually
+      const nextCompleted = new Set(state.completedLevels);
+      nextCompleted.add(state.currentLevel);
       return {
         currentLevel: next,
-        currentFileSystem: levelData.initialState || defaultFileSystemState
+        currentFileSystem: levelData.initialState || defaultFileSystemState,
+        completedLevels: nextCompleted,
       };
     });
   },
@@ -68,7 +72,7 @@ const useLevelStore = create<LevelStore>()(persist((set, get) => ({
     set((state) => {
       const prev = Math.max(1, state.currentLevel - 1);
       const levelData = state.levels.find(l => l.id === prev);
-      if (!levelData) return state as any;
+      if (!levelData) return state;
       return {
         currentLevel: prev,
         currentFileSystem: levelData.initialState || defaultFileSystemState
@@ -79,7 +83,7 @@ const useLevelStore = create<LevelStore>()(persist((set, get) => ({
   goToLevel: (level: number) => {
     set((state) => {
       const levelData = state.levels.find(l => l.id === level);
-      if (!levelData) return state as any;
+      if (!levelData) return state;
       return {
         currentLevel: level,
         currentFileSystem: levelData.initialState || defaultFileSystemState
@@ -96,7 +100,7 @@ const useLevelStore = create<LevelStore>()(persist((set, get) => ({
   resetCurrentLevel: () => {
     set((state) => {
       const levelData = state.levels.find(l => l.id === state.currentLevel);
-      if (!levelData) return state as any;
+      if (!levelData) return state;
 
       return {
         currentFileSystem: levelData.initialState || defaultFileSystemState
@@ -146,7 +150,7 @@ const useLevelStore = create<LevelStore>()(persist((set, get) => ({
     const message = level?.successLore || 'Progress recorded.';
     const codexKey = keys[0];
     // Show completion modal for non-final levels
-    if (currentLevel < (levels[levels.length - 1]?.id || 60)) {
+    if (currentLevel < (levels[levels.length - 1]?.id || 150)) {
       const { completionOtherApproaches } = useUIStore.getState();
       ui.openCompletion({ title, message, codexKey, otherApproaches: completionOtherApproaches });
     } else {
@@ -161,10 +165,10 @@ const useLevelStore = create<LevelStore>()(persist((set, get) => ({
   }
 }), {
   name: 'level-store',
-  partialize: (state) => ({ currentLevel: state.currentLevel, completedLevels: Array.from(state.completedLevels), actFilter: state.actFilter }) as any,
+  partialize: (state) => ({ currentLevel: state.currentLevel, completedLevels: Array.from(state.completedLevels), actFilter: state.actFilter }) as { currentLevel: number; completedLevels: number[]; actFilter?: number },
   onRehydrateStorage: () => (state) => {
     if (!state) return;
-    (state as any).completedLevels = new Set((state as any).completedLevels || []);
+    (state as unknown as LevelStore).completedLevels = new Set((state as unknown as { completedLevels?: number[] }).completedLevels || []);
   }
 }));
 

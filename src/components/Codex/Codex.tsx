@@ -55,9 +55,9 @@ const Codex: React.FC = () => {
               </div>
               <div className="text-xs text-terminal-text/60 mb-2">Unlocked by levels: {(codexUnlockMap[e.key] || []).join(', ') || '—'}</div>
               <div className="prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: marked.parse(e.markdown) as string }} />
-              {Array.isArray((e as any).tokens) && (e as any).tokens.length > 0 && (
+              {Array.isArray(e.tokens) && e.tokens.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {(e as any).tokens.map((tok: string) => (
+                  {e.tokens.map((tok) => (
                     <button key={tok} className="text-xs bg-white/5 hover:bg-white/10 border border-white/10 px-2 py-0.5 rounded" onClick={() => setSelectedCodexKey(tok)}>{tok}</button>
                   ))}
                 </div>

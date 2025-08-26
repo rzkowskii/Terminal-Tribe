@@ -16,6 +16,7 @@ interface UiState {
   showSkills?: boolean;
   showProfile?: boolean;
   showSummary?: boolean;
+  showAbout?: boolean;
   showTerminalHints?: boolean;
   autoAdvance: boolean;
   autoAdvanceDelayMs: number;
@@ -54,6 +55,7 @@ interface UiState {
   setShowSkills: (v: boolean) => void;
   setShowProfile: (v: boolean) => void;
   setShowSummary: (v: boolean) => void;
+  setShowAbout: (v: boolean) => void;
   setShowTerminalHints: (v: boolean) => void;
   setAutoAdvance: (v: boolean) => void;
   setAutoAdvanceDelay: (ms: number) => void;
@@ -75,7 +77,7 @@ const useUiStore = create<UiState>()(persist((set, get) => ({
   showCompletionModal: false,
   showPalette: false,
   showHint: false,
-  showScene: true,
+  showScene: false,
   showSceneEffects: true,
   showFinale: false,
   showSettings: false,
@@ -83,6 +85,7 @@ const useUiStore = create<UiState>()(persist((set, get) => ({
   showSkills: false,
   showProfile: false,
   showSummary: false,
+  showAbout: false,
   showTerminalHints: true,
   autoAdvance: false,
   autoAdvanceDelayMs: 800,
@@ -128,6 +131,7 @@ const useUiStore = create<UiState>()(persist((set, get) => ({
   setShowSkills: (v) => set({ showSkills: v }),
   setShowProfile: (v) => set({ showProfile: v }),
   setShowSummary: (v) => set({ showSummary: v }),
+  setShowAbout: (v) => set({ showAbout: v }),
   setShowTerminalHints: (v) => set({ showTerminalHints: v }),
   openCompletion: (payload) => set({
     showCompletionModal: true,

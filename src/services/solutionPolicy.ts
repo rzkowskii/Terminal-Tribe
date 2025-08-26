@@ -100,18 +100,18 @@ export function evaluateSolution(input: SolutionEvaluationInput): SolutionEvalua
   try {
     const ast = parse(rawCommand);
     if (ast) {
-      const sig = pipelineSignature(ast as any);
+      const sig = pipelineSignature(ast as PipelineNode | SimpleCommandNode);
       // Compare signature to expected and accepted
       if (level.expectedCommand) {
-        const esig = pipelineSignature(parse(normalizeAliases(level.expectedCommand)) as any);
+        const esig = pipelineSignature(parse(normalizeAliases(level.expectedCommand)) as PipelineNode | SimpleCommandNode);
         if (esig === sig) matched.push('pipeline-equivalence');
       }
       for (const acc of accepted) {
-        const asig = pipelineSignature(parse(normalizeAliases(acc)) as any);
+        const asig = pipelineSignature(parse(normalizeAliases(acc)) as PipelineNode | SimpleCommandNode);
         if (asig === sig && !otherValidApproaches.includes(acc)) otherValidApproaches.push(acc);
       }
     }
-  } catch (_e) {
+  } catch {
     // ignore parse errors here
   }
 

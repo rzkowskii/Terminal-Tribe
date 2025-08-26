@@ -1,4 +1,5 @@
 import { FileSystemState, FileSystemNode, Level } from '../types/level';
+import { validateArchive, validateCron, validateFilesPresence, validateProcesses } from '../services/postConditionValidators';
 
 export interface LevelValidationResult {
   success: boolean;
@@ -108,69 +109,23 @@ export function validatePostConditions(level: Level, output?: string): LevelVali
   const pc = level.postConditions || {};
   // Processes validation
   if (pc.processes) {
-    try {
-      const useProcessStore = require('../stores/processStore').default as any;
-      const procs: any[] = useProcessStore.getState().list();
-      if (Array.isArray((pc as any).processes.mustHaveCommand)) {
-        for (const cmd of (pc as any).processes.mustHaveCommand) {
-          if (!procs.some(p => (p.command || '').includes(cmd))) {
-            return { success: false, message: `Required process not present: ${cmd}` };
-          }
-        }
-      }
-      if (Array.isArray((pc as any).processes.mustNotHaveCommand)) {
-        for (const cmd of (pc as any).processes.mustNotHaveCommand) {
-          if (procs.some(p => (p.command || '').includes(cmd))) {
-            return { success: false, message: `Forbidden process present: ${cmd}` };
-          }
-        }
-      }
-    } catch (_e) {}
+    const res = validateProcesses(pc);
+    if (!res.success) return res;
   }
   // Cron validation
   if (pc.cron) {
-    try {
-      const useCronStore = require('../stores/cronStore').default as any;
-      const entries: any[] = useCronStore.getState().list();
-      if (Array.isArray((pc as any).cron.mustHave)) {
-        for (const line of (pc as any).cron.mustHave) {
-          if (!entries.some(e => `${e.schedule} ${e.command}`.includes(line))) {
-            return { success: false, message: `Cron entry missing: ${line}` };
-          }
-        }
-      }
-    } catch (_e) {}
+    const res = validateCron(pc);
+    if (!res.success) return res;
   }
   // Archive validation
   if (pc.archive) {
-    const a: any = (pc as any).archive;
-    if (Array.isArray(a.manifestPaths) && Array.isArray(a.extractedInto)) {
-      // Ensure extracted files exist
-      const fsUtil = require('./fileSystem');
-      const dests: string[] = a.extractedInto;
-      for (const target of dests) {
-        const node = fsUtil.getNodeAtPath(level.expectedState, target);
-        if (!node) return { success: false, message: `Expected extracted path missing: ${target}` };
-      }
-    }
-    if (Array.isArray(a.checksums)) {
-      const fsUtil = require('./fileSystem');
-      const { ChecksumService } = require('../services/checksumService');
-      for (const item of a.checksums as any[]) {
-        const node = fsUtil.getNodeAtPath(level.expectedState, item.file);
-        if (!node || (node as any).type !== 'file') return { success: false, message: `Expected file for checksum missing: ${item.file}` };
-        const sum = ChecksumService.sha256sum((node as any).content || '');
-        if (sum !== item.sha256) return { success: false, message: `Checksum mismatch for ${item.file}` };
-      }
-    }
+    const res = validateArchive(pc, level.expectedState);
+    if (!res.success) return res;
   }
   // Files presence validation
-  if ((pc as any).files?.mustExist) {
-    const fsUtil = require('./fileSystem');
-    for (const path of ((pc as any).files.mustExist as string[])) {
-      const node = fsUtil.getNodeAtPath(level.expectedState, path);
-      if (!node) return { success: false, message: `Expected file/directory missing: ${path}` };
-    }
+  if ((pc as unknown as { files?: { mustExist?: string[] } }).files?.mustExist) {
+    const res = validateFilesPresence(pc, level.expectedState);
+    if (!res.success) return res;
   }
   return { success: true };
 }

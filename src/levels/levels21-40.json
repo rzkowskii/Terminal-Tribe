@@ -360,198 +360,148 @@
         "files": {}
       }
     },
+
     {
       "id": 31,
-      "title": "Verify Links",
-      "story": "Confirm link types via detailed listing.",
-      "task": "Use a long listing to inspect entries.",
-      "expectedCommand": "ls -l",
-      "successMessage": "Links identified. Types confirmed.",
+      "title": "First Lines",
+      "story": "Iris: Read the brief; start at the top.",
+      "task": "Show the first 3 lines of briefing.txt.",
+      "expectedCommand": "head -n 3 briefing.txt",
+      "successMessage": "Top lines revealed.",
+      "hint": "head -n N file",
+      "conceptKeys": ["text-io"],
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "shared": {
-            "type": "directory",
-            "files": {}
-          },
-          "shared_link": {
-            "type": "symlink",
-            "target": "shared",
-            "permissions": "lrwxrwxrwx",
-            "owner": "recruit",
-            "group": "tribe"
-          }
+          "briefing.txt": { "type": "file", "content": "L1\nL2\nL3\nL4\n" }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "shared": {
-            "type": "directory",
-            "files": {}
-          },
-          "shared_link": {
-            "type": "symlink",
-            "target": "shared",
-            "permissions": "lrwxrwxrwx",
-            "owner": "recruit",
-            "group": "tribe"
-          }
+          "briefing.txt": { "type": "file", "content": "L1\nL2\nL3\nL4\n" }
         }
       }
     },
     {
       "id": 32,
-      "title": "Broken Reference",
-      "story": "A dangling link wastes cycles. Remove it.",
-      "task": "Remove the symlink named dangling.",
-      "expectedCommand": "rm dangling",
-      "successMessage": "Broken link removed. Integrity restored.",
+      "title": "Last Lines",
+      "story": "Iris: Check the most recent events.",
+      "task": "Show the last 2 lines of briefing.txt.",
+      "expectedCommand": "tail -n 2 briefing.txt",
+      "successMessage": "Tail lines displayed.",
+      "hint": "tail -n N file",
+      "conceptKeys": ["text-io"],
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "dangling": {
-            "type": "symlink",
-            "target": "/no/such/path",
-            "permissions": "lrwxrwxrwx",
-            "owner": "recruit",
-            "group": "tribe"
-          }
+          "briefing.txt": { "type": "file", "content": "L1\nL2\nL3\nL4\n" }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
-        "files": {}
+        "files": {
+          "briefing.txt": { "type": "file", "content": "L1\nL2\nL3\nL4\n" }
+        }
       }
     },
     {
       "id": 33,
-      "title": "Through the Shortcut",
-      "story": "Traverse into a directory via its symlink.",
-      "task": "Change into docs_link.",
-      "expectedCommand": "cd docs_link",
-      "successMessage": "Link traversed. Reference followed.",
+      "title": "Line Count",
+      "story": "Iris: How long is the report?",
+      "task": "Print the number of lines in report.txt.",
+      "expectedCommand": "wc -l report.txt",
+      "successMessage": "Lines counted.",
+      "hint": "wc -l file",
+      "conceptKeys": ["text-io"],
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "docs": {
-            "type": "directory",
-            "files": {}
-          },
-          "docs_link": {
-            "type": "symlink",
-            "target": "docs",
-            "permissions": "lrwxrwxrwx",
-            "owner": "recruit",
-            "group": "tribe"
-          }
+          "report.txt": { "type": "file", "content": "a\nb\nc\n" }
         }
       },
       "expectedState": {
-        "currentDirectory": "/home/recruit/docs_link",
+        "currentDirectory": "/home/recruit",
         "files": {
-          "docs": {
-            "type": "directory",
-            "files": {}
-          },
-          "docs_link": {
-            "type": "symlink",
-            "target": "docs",
-            "permissions": "lrwxrwxrwx",
-            "owner": "recruit",
-            "group": "tribe"
-          }
+          "report.txt": { "type": "file", "content": "a\nb\nc\n" }
         }
       }
     },
     {
       "id": 34,
-      "title": "Physical Reality",
-      "story": "Report the real path when symlinks are involved.",
-      "task": "Print the physical working directory.",
-      "expectedCommand": "pwd -P",
-      "successMessage": "Physical path found. Reality confirmed.",
+      "title": "Filter Errors",
+      "story": "Iris: Pull only the error lines.",
+      "task": "Print lines containing 'error' from app.log (case-insensitive).",
+      "expectedCommand": "grep -i error app.log",
+      "successMessage": "Errors isolated.",
+      "hint": "grep -i pattern file",
+      "conceptKeys": ["search", "regex"],
       "initialState": {
-        "currentDirectory": "/home/recruit/docs_link",
+        "currentDirectory": "/home/recruit",
         "files": {
-          "docs": {
-            "type": "directory",
-            "files": {}
-          },
-          "docs_link": {
-            "type": "symlink",
-            "target": "docs",
-            "permissions": "lrwxrwxrwx",
-            "owner": "recruit",
-            "group": "tribe"
-          }
+          "app.log": { "type": "file", "content": "Info ok\nERROR bad\nwarn maybe\nError again\n" }
         }
       },
       "expectedState": {
-        "currentDirectory": "/home/recruit/docs_link",
+        "currentDirectory": "/home/recruit",
         "files": {
-          "docs": {
-            "type": "directory",
-            "files": {}
-          },
-          "docs_link": {
-            "type": "symlink",
-            "target": "docs",
-            "permissions": "lrwxrwxrwx",
-            "owner": "recruit",
-            "group": "tribe"
-          }
+          "app.log": { "type": "file", "content": "Info ok\nERROR bad\nwarn maybe\nError again\n" }
         }
       }
     },
     {
       "id": 35,
-      "title": "Batch Cleanup",
-      "story": "Eliminate multiple files in one command.",
-      "task": "Remove files a.log and b.log.",
-      "expectedCommand": "rm a.log b.log",
-      "successMessage": "Batch removal complete. Efficiency proven.",
+      "title": "Extract Columns",
+      "story": "Iris: Names and IDs only.",
+      "task": "Print the 1st and 3rd CSV fields from users.csv.",
+      "expectedCommand": "cut -d , -f 1,3 users.csv",
+      "successMessage": "Columns extracted.",
+      "hint": "cut -d , -f 1,3 file",
+      "conceptKeys": ["text-io"],
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "a.log": {
-            "type": "file",
-            "content": "1"
-          },
-          "b.log": {
-            "type": "file",
-            "content": "2"
-          }
+          "users.csv": { "type": "file", "content": "alice,admin,100\nbob,user,200\n" }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
-        "files": {}
+        "files": {
+          "users.csv": { "type": "file", "content": "alice,admin,100\nbob,user,200\n" }
+        }
       }
     },
     {
       "id": 36,
-      "title": "Vault Audit",
-      "story": "One last inspection before sealing.",
-      "task": "List current directory in long format.",
-      "expectedCommand": "ls -l",
-      "successMessage": "Arctic Vaults secured. Precision achieved.",
+      "title": "Sort Numbers",
+      "story": "Iris: Order reveals patterns.",
+      "task": "Sort nums.txt numerically ascending.",
+      "expectedCommand": "sort -n nums.txt",
+      "successMessage": "Numbers sorted.",
+      "hint": "sort -n file",
+      "conceptKeys": ["text-io"],
       "initialState": {
         "currentDirectory": "/home/recruit",
-        "files": {}
+        "files": {
+          "nums.txt": { "type": "file", "content": "10\n2\n11\n" }
+        }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
-        "files": {}
+        "files": {
+          "nums.txt": { "type": "file", "content": "10\n2\n11\n" }
+        }
       }
     },
+
     {
       "id": 37,
       "title": "Duplicate Intel",
-      "story": "Copy a critical file to create redundancy.",
+      "story": "Iris: Make a safe copy—next, we'll read and analyze it.",
       "task": "Copy data.txt to backup.txt.",
       "expectedCommand": "cp data.txt backup.txt",
       "successMessage": "Data copied. Redundancy established.",
+      "hint": "cp source destination",
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
@@ -578,10 +528,11 @@
     {
       "id": 38,
       "title": "Tree Copy",
-      "story": "Duplicate a directory tree intact.",
+      "story": "Iris: Preserve structure; we'll parse its contents soon.",
       "task": "Copy source_dir to backup_dir recursively.",
       "expectedCommand": "cp -r source_dir backup_dir",
       "successMessage": "Tree duplicated. Full backup complete.",
+      "hint": "cp -r dir1 dir2",
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
@@ -623,10 +574,11 @@
     {
       "id": 39,
       "title": "Rename Protocol",
-      "story": "Update a filename for clarity.",
+      "story": "Iris: Clear names make logs easier to read next act.",
       "task": "Rename old.log to new.log.",
       "expectedCommand": "mv old.log new.log",
       "successMessage": "Renamed successfully. Identity changed.",
+      "hint": "mv source target",
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
@@ -649,10 +601,11 @@
     {
       "id": 40,
       "title": "Relocation",
-      "story": "Move a file into the logs directory.",
+      "story": "Iris: Put logs in place—we'll grep and sort them soon.",
       "task": "Move new.log into logs/new.log.",
       "expectedCommand": "mv new.log logs/new.log",
       "successMessage": "Data moved. Resources optimized.",
+      "hint": "mv file dir/file",
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {

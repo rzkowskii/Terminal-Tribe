@@ -33,12 +33,10 @@ export function getNodeFiles(node: FileSystemNode): { [key: string]: FileSystemN
 
 export const getPathParts = (path: string): string[] => {
   const parts = path.split('/').filter(Boolean);
-  console.log('Path parts:', parts);
   return parts;
 };
 
 export const resolvePath = (currentPath: string, targetPath: string): string => {
-  console.log('Resolving path:', { currentPath, targetPath });
   if (targetPath.startsWith('/')) {
     return targetPath;
   }
@@ -55,7 +53,6 @@ export const resolvePath = (currentPath: string, targetPath: string): string => 
   });
 
   const resolvedPath = '/' + parts.join('/');
-  console.log('Resolved path:', resolvedPath);
   return resolvedPath;
 };
 
@@ -63,11 +60,7 @@ export const getNodeAtPath = (
   state: FileSystemState,
   path: string
 ): FileSystemNode | null => {
-  console.log('Getting node at path:', path);
-  console.log('Current state:', state);
-  
   if (path === '/') {
-    console.log('Returning root directory node');
     return { type: 'directory', files: state.files };
   }
   
@@ -76,30 +69,23 @@ export const getNodeAtPath = (
 
   for (let i = 0; i < parts.length; i++) {
     const part = parts[i];
-    console.log(`Traversing path part ${i}:`, { part, current });
 
     const node = current[part];
-    console.log(`Looking up node for part ${part}:`, node);
 
     if (!node) {
-      console.log('Node not found at:', part);
       return null;
     }
 
     if (i === parts.length - 1) {
-      console.log('Found target node:', node);
       return node;
     }
 
     if (!isDirectoryNode(node)) {
-      console.log('Not a directory at:', part);
       return null;
     }
 
     current = node.files;
   }
-
-  console.log('Returning root directory');
   return { type: 'directory', files: state.files };
 };
 
@@ -109,7 +95,6 @@ export const listDirectory = (
   showHidden: boolean = false,
   recursive: boolean = false
 ): string[] => {
-  console.log('Listing directory:', { path, showHidden, recursive, state });
   const node = getNodeAtPath(state, path);
   if (!node) {
     throw new FileSystemError('No such file or directory');
@@ -155,8 +140,8 @@ export const listDirectory = (
   // If recursive, add subdirectory contents
   if (recursive) {
     Object.entries(node.files)
-      .filter(([_, node]) => isDirectoryNode(node))
-      .forEach(([name, _]) => {
+      .filter(([, n]) => isDirectoryNode(n))
+      .forEach(([name]) => {
         const subPath = path + '/' + name;
         const subEntries = listDirectory(state, subPath, showHidden, recursive)
           .map(entry => name + '/' + entry);
@@ -164,7 +149,6 @@ export const listDirectory = (
       });
   }
 
-  console.log('Directory entries:', entries);
   return entries;
 };
 
@@ -173,7 +157,6 @@ export const formatListing = (
   path: string,
   detailed: boolean = false
 ): string => {
-  console.log('Formatting directory listing:', { state, path, detailed });
   const node = getNodeAtPath(state, path);
   if (!node) {
     throw new FileSystemError('No such file or directory');
@@ -203,7 +186,8 @@ export const formatListing = (
       const group = node.group || 'tribe';
       const size = isFileNode(node) ? (node.size || 0) : 
                   isDirectoryNode(node) ? 4096 : 0;
-      const inode = (node as any).inode ? String((node as any).inode).padStart(6) + ' ' : '';
+      const inodeNum = (node as unknown as { inode?: number }).inode;
+      const inode = inodeNum ? String(inodeNum).padStart(6) + ' ' : '';
       
       let displayName = name;
       if (isDirectoryNode(node)) {
@@ -226,8 +210,7 @@ export const changeDirectory = (
   targetPath: string,
   options?: { physical?: boolean }
 ): FileSystemState => {
-  console.log('Changing directory:', { currentState: state, targetPath });
-
+  // Avoid unused var lint for currentPath elsewhere
   // Handle special cases
   if (targetPath === '') {
     return {
@@ -245,13 +228,12 @@ export const changeDirectory = (
       currentDirectory: state.previousDirectory,
       previousDirectory: state.currentDirectory
     };
-    console.log('New state after cd -:', newState);
     return newState;
   }
 
   const resolvedPath = resolvePath(state.currentDirectory, targetPath);
   const finalPath = options?.physical ? resolvePhysicalPath(state, resolvedPath) : resolvedPath;
-  let node = getNodeAtPath(state, finalPath);
+  const node = getNodeAtPath(state, finalPath);
 
   if (!node) {
     throw new FileSystemError('No such directory');
@@ -278,7 +260,6 @@ export const changeDirectory = (
         previousDirectory: state.currentDirectory,
         currentDirectory: nextDir,
       };
-      console.log('New state after cd (symlink):', newState);
       return newState;
     }
     throw new FileSystemError('Not a directory');
@@ -289,7 +270,6 @@ export const changeDirectory = (
     previousDirectory: state.currentDirectory,
     currentDirectory: finalPath,
   };
-  console.log('New state after cd:', newState);
   return newState;
 };
 
@@ -298,7 +278,6 @@ export const createFile = (
   path: string,
   content: string = ''
 ): FileSystemState => {
-  console.log('Creating file:', { state, path, content });
   const parts = getPathParts(path);
   const fileName = parts.pop();
   if (!fileName) {
@@ -316,6 +295,7 @@ export const createFile = (
   newFiles[fileName] = {
     type: 'file',
     content,
+    size: content.length,
   };
 
   // Create a new state with the updated file
@@ -331,7 +311,6 @@ export const createFile = (
   }
   current[fileName] = newFiles[fileName];
 
-  console.log('New state after creating file:', newState);
   return assignInodes(newState);
 };
 
@@ -341,6 +320,8 @@ export const writeFile = (
   content: string,
   append: boolean = false
 ): FileSystemState => {
+  // eslint-disable-next-line no-console
+  console.log('[writeFile]', path, 'append=', append, 'len=', (content || '').length);
   const parts = getPathParts(path);
   const fileName = parts.pop();
   if (!fileName) throw new FileSystemError('Invalid file name');
@@ -359,7 +340,8 @@ export const writeFile = (
       if (!node || !isDirectoryNode(node)) throw new FileSystemError('Invalid path');
       current = node.files;
     }
-    current[fileName] = { ...existing, content: append ? (existing.content + content) : content } as FileNode;
+    const newContent = append ? (existing.content + content) : content;
+    current[fileName] = { ...existing, content: newContent, size: newContent.length } as FileNode;
     nextState = newState;
   } else {
     throw new FileSystemError('Not a file');
@@ -372,19 +354,14 @@ export const createDirectory = (
   path: string,
   recursive: boolean = false
 ): FileSystemState => {
-  console.log('Creating directory:', { state, path, recursive });
   const parts = getPathParts(path);
 
   // Clone root files map to build a new tree immutably
   const newFilesRoot: { [key: string]: FileSystemNode } = { ...state.files };
   let cursor: { [key: string]: FileSystemNode } = newFilesRoot;
-  let currentPath = '';
 
   for (let index = 0; index < parts.length; index++) {
     const part = parts[index];
-    currentPath += '/' + part;
-    console.log('Processing directory part:', { part, currentPath });
-
     const existingNode = cursor[part];
     if (!existingNode) {
       if (!recursive && index < parts.length - 1) {
@@ -414,7 +391,6 @@ export const createDirectory = (
     ...state,
     files: newFilesRoot,
   };
-  console.log('New state after creating directory:', newState);
   return assignInodes(newState);
 };
 
@@ -424,8 +400,6 @@ export const copyFile = (
   destPath: string,
   recursive: boolean = false
 ): FileSystemState => {
-  console.log('Copying file:', { state, sourcePath, destPath, recursive });
-
   // Get source node
   const sourceNode = getNodeAtPath(state, sourcePath);
   if (!sourceNode) {
@@ -463,7 +437,6 @@ export const copyFile = (
   }
   current[destName] = cloneNode(sourceNode);
 
-  console.log('New state after copying:', newState);
   return assignInodes(newState);
 };
 
@@ -472,8 +445,6 @@ export const moveFile = (
   sourcePath: string,
   destPath: string
 ): { newState: FileSystemState; movedPath: string } => {
-  console.log('Moving file:', { state, sourcePath, destPath });
-
   // First copy the file
   const newState = copyFile(state, sourcePath, destPath, true);
 
@@ -501,8 +472,6 @@ export const removeFile = (
   recursive: boolean = false,
   ignoreMissing: boolean = false
 ): FileSystemState => {
-  console.log('Removing file:', { state, path, recursive });
-
   const node = getNodeAtPath(state, path);
   if (!node) {
     if (ignoreMissing) {
@@ -521,15 +490,14 @@ export const removeFile = (
   let current = newState.files;
 
   for (const part of parts) {
-    const node = current[part];
-    if (!node || !isDirectoryNode(node)) {
+    const childNode = current[part];
+    if (!childNode || !isDirectoryNode(childNode)) {
       throw new FileSystemError('Invalid path');
     }
-    current = node.files;
+    current = childNode.files;
   }
 
   delete current[fileName];
-  console.log('New state after removing file:', newState);
   return assignInodes(newState);
 };
 
@@ -537,7 +505,6 @@ export const removeEmptyDirectory = (
   state: FileSystemState,
   path: string
 ): FileSystemState => {
-  console.log('Removing empty directory with rmdir:', { state, path });
   const node = getNodeAtPath(state, path);
   if (!node) {
     throw new FileSystemError('No such file or directory');
@@ -561,7 +528,6 @@ export const removeEmptyDirectory = (
     current = child.files;
   }
   delete current[name];
-  console.log('New state after rmdir:', newState);
   return assignInodes(newState);
 };
 
@@ -571,8 +537,6 @@ export const createLink = (
   linkPath: string,
   symbolic: boolean = false
 ): FileSystemState => {
-  console.log('Creating link:', { state, sourcePath, linkPath, symbolic });
-
   const sourceNode = getNodeAtPath(state, sourcePath);
   if (!sourceNode) {
     throw new FileSystemError('Source file does not exist');
@@ -603,7 +567,6 @@ export const createLink = (
     current[linkName] = cloneNode(sourceNode);
   }
 
-  console.log('New state after creating link:', newState);
   return assignInodes(newState);
 };
 
@@ -623,14 +586,14 @@ export const cloneNode = (node: FileSystemNode): FileSystemNode => {
 export function assignInodes(state: FileSystemState): FileSystemState {
   let next = 10000;
   const walk = (node: FileSystemNode) => {
-    (node as any).inode = (node as any).inode || next++;
+    (node as unknown as { inode?: number }).inode = (node as unknown as { inode?: number }).inode || next++;
     if (isDirectoryNode(node)) {
       for (const child of Object.values(node.files)) {
         walk(child);
       }
     }
   };
-  const root: DirectoryNode = { type: 'directory', files: state.files, inode: (state as any).inode } as any;
+  const root: DirectoryNode = { type: 'directory', files: state.files, inode: (state as unknown as { inode?: number }).inode } as DirectoryNode;
   walk(root);
   return state;
 }

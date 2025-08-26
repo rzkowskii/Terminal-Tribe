@@ -3,27 +3,31 @@ import * as fs from '../../utils/fileSystem';
 import { ArchiveService } from '../../services/archiveService';
 import { ChecksumService } from '../../services/checksumService';
 import useUiStore from '../../stores/uiStore';
-
-function parseFlags(args: string[]): { flags: Set<string>; positionals: string[] } {
+function parseTarArgs(args: string[]): { flags: Set<string>; file?: string; files: string[] } {
+  // Tar accepts clustered flags like -czf out.tar files...
   const flags = new Set<string>();
-  const positionals: string[] = [];
+  const files: string[] = [];
+  let file: string | undefined;
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
-    if (a === '-f') {
-      flags.add('f');
-      positionals.push('-f');
-      if (i + 1 < args.length) {
-        positionals.push(args[++i]);
+    if (a === '--') {
+      // Remainder are files
+      files.push(...args.slice(i + 1));
+      break;
+    }
+    if (a.startsWith('-') && a !== '-') {
+      const cluster = a.slice(1);
+      for (const ch of cluster) flags.add(ch);
+      if (cluster.includes('f')) {
+        if (i + 1 < args.length) {
+          file = args[++i];
+        }
       }
       continue;
     }
-    if (a.startsWith('-') && a.length > 1) {
-      for (const ch of a.slice(1)) flags.add(ch);
-    } else {
-      positionals.push(a);
-    }
+    files.push(a);
   }
-  return { flags, positionals };
+  return { flags, file, files };
 }
 
 export const tarCmd: BuiltinCommand = {
@@ -33,18 +37,15 @@ export const tarCmd: BuiltinCommand = {
     if (!featureFlags.archives) {
       return { output: 'Archives feature is disabled in Settings.', status: 'info' };
     }
-    const { flags, positionals } = parseFlags(args);
+    const { flags, file, files } = parseTarArgs(args);
     const create = flags.has('c');
     const extract = flags.has('x');
     const list = flags.has('t');
     const gzip = flags.has('z');
     const xz = flags.has('J');
-    let fileName = '';
-    let files: string[] = [];
     if (!create && !extract && !list) return { output: 'tar: must specify one of -c, -x, -t', status: 'error' };
     if (!flags.has('f')) return { output: 'tar: missing -f option', status: 'error' };
-    fileName = positionals[0];
-    files = positionals.slice(1);
+    const fileName = file;
     if (!fileName) return { output: 'tar: missing archive file after -f', status: 'error' };
     if (create) {
       // Fallback: if no files explicitly provided, include all files in CWD
@@ -54,7 +55,7 @@ export const tarCmd: BuiltinCommand = {
         const node = fs.getNodeAtPath(ctx.currentState, cwd);
         if (node && node.type === 'directory') {
           targetFiles = Object.entries(node.files)
-            .filter(([_, n]) => n.type === 'file')
+            .filter(([, n]) => n.type === 'file')
             .map(([name]) => name);
         }
       }
@@ -67,11 +68,15 @@ export const tarCmd: BuiltinCommand = {
     const node = fs.getNodeAtPath(ctx.currentState, abs);
     if (!node || node.type !== 'file') return { output: `tar: ${fileName}: not found`, status: 'error' };
     const data = JSON.parse(node.content || '{}');
-    const tarNode = { type: 'file', content: node.content, manifest: data.manifest || {} } as any;
+    const tarNode: { type: 'file'; content: string; manifest: Record<string, string> } = {
+      type: 'file',
+      content: node.content,
+      manifest: (data.manifest || {}) as Record<string, string>
+    };
     if (list) {
       const entries = (tarNode.manifest && Object.keys(tarNode.manifest).length > 0)
         ? ArchiveService.listTarball(tarNode)
-        : Object.keys(data.contents || {});
+        : Object.keys((data.contents || {}) as Record<string, unknown>);
       return { output: entries.join('\n'), status: 'success', newState: ctx.currentState };
     }
     if (extract) {

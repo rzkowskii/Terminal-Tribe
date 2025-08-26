@@ -11,9 +11,8 @@ export const pwd: BuiltinCommand = {
     if (flags.has('P')) {
       try {
         // Canonicalize fully by dereferencing nested symlinks in the path
-        // @ts-ignore use internal util
-        output = (fs as any).resolvePhysicalPath(ctx.currentState, output);
-      } catch (_e) {
+        output = fs.resolvePhysicalPath(ctx.currentState, output as string);
+      } catch {
         // Fallback to logical path if resolution fails
       }
     }
@@ -36,8 +35,7 @@ export const cat: BuiltinCommand = {
     const { positionals } = parseFlags(args);
     if (positionals.length === 0) {
       // pass through stdin if available
-      // @ts-ignore add stdin in ExecutionContext
-      const input = (ctx as any).stdin || '';
+      const input = (ctx.stdin as string | undefined) || '';
       return { output: input, status: 'success' };
     }
     let out = '';
@@ -70,7 +68,7 @@ export const ls: BuiltinCommand = {
 
     const outputs: string[] = [];
 
-    for (let targetPath of targets) {
+    for (const targetPath of targets) {
       const resolved = fs.resolvePath(ctx.currentState.currentDirectory, targetPath);
       const node = fs.getNodeAtPath(ctx.currentState, resolved);
       if (!node) {
@@ -98,15 +96,15 @@ export const ls: BuiltinCommand = {
         }
         if (detailed) {
           const permissions = node.permissions || (isSymlinkNode(node) ? 'lrwxrwxrwx' : '-rw-r--r--');
-          const owner = (node as any).owner || 'recruit';
-          const group = (node as any).group || 'tribe';
+          const owner = node.owner || 'recruit';
+          const group = node.group || 'tribe';
           const size = isFileNode(node) ? (node.size || 0) : 0;
-          const inode = (node as any).inode ? String((node as any).inode).padStart(6) + ' ' : '';
+          const inode = (node as unknown as { inode?: number }).inode ? String((node as unknown as { inode?: number }).inode).padStart(6) + ' ' : '';
           display = `${inode}${permissions} ${owner} ${group} ${String(size).padStart(8)} ${display}`;
         }
         if (showInode) {
-          const inode = (node as any).inode ? String((node as any).inode) : '000000';
-          display = `${inode} ${display}`;
+          const inodeOnly = (node as unknown as { inode?: number }).inode ? String((node as unknown as { inode?: number }).inode) : '000000';
+          display = `${inodeOnly} ${display}`;
         }
         outputs.push(display);
       }
@@ -135,9 +133,7 @@ export const touch: BuiltinCommand = {
     if (positionals.length === 0) return { output: 'touch: missing file operand', status: 'error' };
     let state = ctx.currentState;
     for (const p of positionals) {
-      // Allow shorthand under /home/recruit flat area
-      const absCandidate = fs.resolvePath(state.currentDirectory, p);
-      const abs = absCandidate.startsWith('/home/recruit/') ? ('/' + absCandidate.slice('/home/recruit/'.length)) : absCandidate;
+      const abs = fs.resolvePath(state.currentDirectory, p);
       state = fs.createFile(state, abs);
     }
     return { output: '', status: 'success', newState: state };

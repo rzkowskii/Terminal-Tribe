@@ -3,6 +3,7 @@ export interface CodexEntry {
   title: string;
   markdown: string;
   related?: string[];
+  tokens?: string[];
 }
 
 export const CODEX_ENTRIES: CodexEntry[] = [

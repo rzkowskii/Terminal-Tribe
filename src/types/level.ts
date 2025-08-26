@@ -6,7 +6,7 @@ export interface Level {
   expectedCommand: string;
   acceptedCommands?: string[]; // Accept simple strings or pipeline equivalents via SolutionPolicy
   expectedOutput?: string;
-  postConditions?: Record<string, any>;
+  postConditions?: Record<string, unknown>;
   rubric?: { efficiency?: string; safety?: string; style?: string };
   successMessage: string;
   initialState: FileSystemState;  // Made required to ensure type safety

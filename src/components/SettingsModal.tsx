@@ -4,7 +4,7 @@ import useTelemetryStore from '../stores/telemetryStore';
 import FocusTrap from './FocusTrap';
 
 const SettingsModal: React.FC = () => {
-  const { showSettings, setShowSettings, autoAdvance, setAutoAdvance, autoAdvanceDelayMs, setAutoAdvanceDelay, showSceneEffects, toggleSceneEffects, featureFlags, showTerminalHints } = useUiStore();
+  const { showSettings, setShowSettings, autoAdvance, setAutoAdvance, autoAdvanceDelayMs, setAutoAdvanceDelay, showSceneEffects, toggleSceneEffects, featureFlags, showTerminalHints, showScene, toggleScene } = useUiStore();
   const close = () => setShowSettings(false);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   if (!showSettings) return null;
@@ -29,6 +29,10 @@ const SettingsModal: React.FC = () => {
             <label className="flex items-center justify-between gap-3">
               <span>Reduce Motion / Disable Effects</span>
               <input type="checkbox" checked={!showSceneEffects} onChange={() => toggleSceneEffects()} />
+            </label>
+            <label className="flex items-center justify-between gap-3">
+              <span>Experimental Scene</span>
+              <input type="checkbox" checked={!!showScene} onChange={() => toggleScene()} />
             </label>
             <label className="flex items-center justify-between gap-3">
               <span>Terminal Hints</span>

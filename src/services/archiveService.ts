@@ -1,4 +1,5 @@
-import { FileSystemState, DirectoryNode, FileNode, FileSystemNode } from '../types/level';
+import { FileSystemState, FileNode, FileSystemNode } from '../types/level';
+import * as fsUtil from '../utils/fileSystem';
 
 export interface ArchiveManifest {
   [path: string]: string; // sha256 hash of file contents
@@ -47,7 +48,7 @@ export class ArchiveService {
     let newState = { ...state } as FileSystemState;
     for (const [rel, content] of Object.entries<string>(data.contents || {})) {
       const target = destPath.replace(/\/$/, '') + '/' + rel.replace(/^\//, '');
-      newState = writeFile(newState, target, content);
+      newState = fsUtil.writeFile(newState, target, content);
     }
     return newState;
   }
@@ -56,32 +57,20 @@ export class ArchiveService {
 // Minimal FS helpers (avoid circular import)
 function getNode(state: FileSystemState, path: string): FileSystemNode | undefined {
   const parts = path.split('/').filter(Boolean);
-  let node: any = state.files;
+  let node: Record<string, FileSystemNode> | undefined = state.files as Record<string, FileSystemNode>;
   for (let i = 0; i < parts.length; i++) {
     const seg = parts[i];
     const isLast = i === parts.length - 1;
     if (!node) return undefined;
-    if (isLast) return node[seg] as FileSystemNode;
-    if (node[seg]?.type !== 'directory') return undefined;
-    node = node[seg].files;
+    const current = node[seg];
+    if (isLast) return current as FileSystemNode;
+    if (!current || current.type !== 'directory') return undefined;
+    node = (current as { type: 'directory'; files: Record<string, FileSystemNode> }).files;
   }
   return undefined;
 }
 
-function writeFile(state: FileSystemState, path: string, content: string): FileSystemState {
-  const parts = path.split('/').filter(Boolean);
-  const root = JSON.parse(JSON.stringify(state.files));
-  let cursor: any = root;
-  for (let i = 0; i < parts.length - 1; i++) {
-    const seg = parts[i];
-    if (!cursor[seg]) cursor[seg] = { type: 'directory', files: {} } as DirectoryNode;
-    if (cursor[seg].type !== 'directory') throw new Error('Not a directory');
-    cursor = cursor[seg].files;
-  }
-  const leaf = parts[parts.length - 1];
-  cursor[leaf] = { type: 'file', content } as FileNode;
-  return { ...state, files: root };
-}
+// writeFile is now delegated to fsUtil.writeFile above for consistent metadata
 
 // Light-weight sha256 for deterministic tests (NOT cryptographically secure here)
 export function sha256(input: string): string {

@@ -5,10 +5,10 @@ import useTelemetryStore from '../stores/telemetryStore';
 import { deriveSuggestions } from '../utils/suggestions';
 
 const SummaryModal: React.FC = () => {
-  const { showSummary, setShowSummary, featureFlags, setShowSkills, setShowCodex, setSelectedCodexKey } = useUiStore();
+  const { showSummary, setShowSummary, featureFlags, setShowSkills } = useUiStore();
   const telemetry = useTelemetryStore();
   const closeRef = useRef<HTMLButtonElement>(null);
-  const data = useMemo(() => telemetry.aggregate(), [telemetry.events]);
+  const data = useMemo(() => telemetry.aggregate(), [telemetry]);
   const suggestions = useMemo(() => {
     if (!featureFlags.telemetry || !featureFlags.suggestions) return [] as ReturnType<typeof deriveSuggestions>;
     return deriveSuggestions(telemetry.events);

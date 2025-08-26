@@ -18,8 +18,8 @@ const CompletionModal: React.FC<Props> = ({ title, message, onClose, onNext, onR
   const closeRef = useRef<HTMLButtonElement>(null);
   const { autoAdvance, autoAdvanceDelayMs } = useUiStore();
   const [remaining, setRemaining] = useState<number | null>(null);
-  const timerRef = useRef<any>(null);
-  const intervalRef = useRef<any>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;

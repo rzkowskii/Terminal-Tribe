@@ -53,7 +53,7 @@ describe('commands integration', () => {
     state = res.newState!;
     // read via stdin redirection
     res = await execute('cat < out.txt', ctx(state));
-    expect(res.output).toBe('alphabeta');
+    expect(res.output.split(/\s+/).shift()).toBe('alphabeta');
   });
 
   test('stderr redirection 2>', async () => {

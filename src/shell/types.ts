@@ -9,7 +9,8 @@ export interface ExecutionContext {
 export type Redirection =
   | { kind: 'stdout'; mode: 'write' | 'append'; target: string }
   | { kind: 'stderr'; mode: 'write' | 'append'; target: string }
-  | { kind: 'stdin'; target: string };
+  | { kind: 'stdin'; target: string }
+  | { kind: 'merge' };
 
 export interface SimpleCommandNode {
   type: 'command';
@@ -24,10 +25,6 @@ export interface PipelineNode {
 }
 
 export type ParsedCommand = SimpleCommandNode | PipelineNode;
-export type Redirection =
-  | { kind: 'stdout'; mode: 'write' | 'append'; target: string }
-  | { kind: 'stderr'; mode: 'write' | 'append'; target: string }
-  | { kind: 'stdin'; target: string };
 
 export interface CommandMeta {
   name: string;

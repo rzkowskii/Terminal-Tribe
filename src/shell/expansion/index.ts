@@ -32,7 +32,9 @@ export function expandArgs(ctx: ExecutionContext, cwd: string, args: string[]): 
 
 function processEnvShim(): Record<string, string | undefined> {
   // In browser/test, process.env may not exist; provide a minimal shim
-  const anyGlobal: any = typeof process !== 'undefined' ? process : {};
-  return (anyGlobal.env as Record<string, string | undefined>) || {};
+  const env = (typeof process !== 'undefined' && typeof (process as unknown as { env?: Record<string, string | undefined> }).env !== 'undefined')
+    ? ((process as unknown as { env?: Record<string, string | undefined> }).env as Record<string, string | undefined>)
+    : {};
+  return env || {};
 }
 

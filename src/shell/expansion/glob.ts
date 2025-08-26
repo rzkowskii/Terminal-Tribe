@@ -3,19 +3,10 @@ import { getNodeAtPath, isDirectoryNode } from '../../utils/fileSystem';
 
 // Very small globbing: supports *, ?, character classes like [abc] and POSIX classes [:alpha:] etc inside []
 export function expandGlob(state: FileSystemState, cwd: string, pattern: string): string[] {
-  // Absolute or relative target
+  // Support globstar ** by expanding it to match zero or more directories
   const isAbsolute = pattern.startsWith('/');
-  let normalized = pattern;
-  // Normalize special-case alias /home/recruit → /
-  if (normalized.startsWith('/home/recruit/')) {
-    normalized = '/' + normalized.slice('/home/recruit/'.length);
-  } else if (normalized === '/home/recruit') {
-    normalized = '/';
-  }
   const baseDir = isAbsolute ? '/' : cwd;
-
-  // Split by '/' and match segment-by-segment
-  const segments = normalized.split('/').filter((s, i) => !(i === 0 && s === ''));
+  const segments = pattern.split('/').filter((s, i) => !(i === 0 && s === ''));
   return matchSegments(state, baseDir, segments);
 }
 
@@ -29,6 +20,18 @@ function matchSegments(state: FileSystemState, base: string, segments: string[])
 
   // List entries of current dir
   const entries = Object.keys(node.files);
+  if (head === '**') {
+    // match zero directory levels
+    let results = matchSegments(state, base, tail);
+    // match one or more directory levels
+    for (const name of entries) {
+      const childBase = (base === '/' ? '' : base) + '/' + name;
+      if (isDirectoryNode(node.files[name])) {
+        results = results.concat(matchSegments(state, childBase, segments));
+      }
+    }
+    return results;
+  }
   const regex = globToRegex(head);
   const matches = entries.filter(name => regex.test(name));
 

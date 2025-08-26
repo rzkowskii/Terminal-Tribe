@@ -68,6 +68,29 @@ function parseRedirections(tokens: string[]): { args: string[]; redirections: Re
   const redirections: Redirection[] = [];
   for (let i = 0; i < tokens.length; i++) {
     const t = tokens[i];
+    // Merge split append tokens: '>' '>' 'file' => '>> file'
+    if (t === '>' && tokens[i + 1] === '>' && i + 2 < tokens.length) {
+      redirections.push({ kind: 'stdout', mode: 'append', target: tokens[i + 2] });
+      i += 2;
+      continue;
+    }
+    // Handle descriptor merge syntax 2>&1
+    if (t === '2>' && tokens[i + 1] === '&1') {
+      redirections.push({ kind: 'merge' });
+      i++;
+      continue;
+    }
+    // Handle attached redirections like >out.txt, >>log, 2>err
+    const attached = t.match(/^(1?>{1,2}|2>|<)(.+)$/);
+    if (attached) {
+      const op = attached[1];
+      const target = attached[2];
+      if (op === '>' || op === '1>') redirections.push({ kind: 'stdout', mode: 'write', target });
+      else if (op === '>>' || op === '1>>') redirections.push({ kind: 'stdout', mode: 'append', target });
+      else if (op === '2>') redirections.push({ kind: 'stderr', mode: 'write', target });
+      else if (op === '<') redirections.push({ kind: 'stdin', target });
+      continue;
+    }
     if ((t === '>' || t === '>>' || t === '2>' || t === '<') && i + 1 < tokens.length) {
       const target = tokens[i + 1];
       if (t === '>') redirections.push({ kind: 'stdout', mode: 'write', target });

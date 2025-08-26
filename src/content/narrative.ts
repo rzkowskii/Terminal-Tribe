@@ -25,9 +25,9 @@ Circuit drones buzz overhead, mapping the canopy for salvageable nodes. The Scri
 
 Your terminal connects to the jungle's grid. Directories cascade before you like underground root systems. Time to learn the art of traversal, to make order from beautiful chaos.`,
 
-  3: `The Arctic Vaults gleam like teeth in the wasteland's jaw—massive storage facilities where the old world hoarded its data in crystalline ice. Here, preservation and destruction dance on a knife's edge. One wrong command could shatter irreplaceable archives.
+  3: `The Arctic Vaults gleam like teeth in the wasteland's jaw—massive storage facilities where the old world hoarded its data in crystalline ice. Here, access is everything. Who may read, who may write, who may execute—the line between safety and catastrophe.
 
-"Links and removal," Iris whispers, her signal weak in the polar interference. "The Vaults teach precision. Some connections are hard, unbreakable. Others are symbolic, shadows pointing to truth. Learn the difference, or lose everything."
+"Permissions and ownership," Iris whispers, her signal thin in the polar interference. "Masks, too. Discipline at creation matters as much as decisions after. Set the rules. Enforce them. The Vaults reward control."
 
 The Null presence is stronger here, seeping through damaged containment. You've seen what happens to Keepers who let corruption touch their systems—empty eyes, speaking in machine code, lost between human and digital.
 
@@ -65,7 +65,7 @@ A Circuit trader approaches your camp, offering three power cells for the route 
 
 That night, you dream in tree structures, see the world as nested directories. Iris watches you work, saying less, trusting more. The student is becoming the teacher.
 
-The Arctic Vaults beacon in the distance, their ice-blue light cutting through the darkness. The real test awaits in the frozen silence.`,
+Ahead lie the Arctic Vaults—cold, sharp, unforgiving. There you'll govern access itself: permissions, ownership, and the umask that shapes new creations. The real test awaits in the frozen silence.`,
 
   3: `The Arctic Vaults seal behind you, their secrets claimed. You've mastered the art of connection and separation, learned when to link and when to sever. The precision required here has sharpened you into something dangerous—someone who can preserve or destroy with equal skill.
 
@@ -164,6 +164,202 @@ const microFor = (level: Level): Partial<Level> => {
         radioChatter: 'Iris: ln creates hard links; -s makes symbolic links.',
         hint: 'ln source target or ln -s source target',
         successLore: 'Links established. Paths aligned without duplication.'
+      };
+    case 'head':
+      return {
+        loreIntro: 'Scan the opening lines—first signals carry intent.',
+        radioChatter: 'Iris: head shows the start. Choose N with -n.',
+        hint: 'head -n N file',
+        successLore: 'Top slice captured. Intent understood.'
+      };
+    case 'tail':
+      return {
+        loreIntro: 'The end speaks softly—recent events whisper here.',
+        radioChatter: 'Iris: tail reveals the latest. -n tunes length.',
+        hint: 'tail -n N file',
+        successLore: 'Tail captured. Recency informs action.'
+      };
+    case 'wc':
+      return {
+        loreIntro: 'Measure before you move—counts reveal scope.',
+        radioChatter: 'Iris: wc -l/-w/-c sum what matters.',
+        hint: 'wc -l file',
+        successLore: 'Scope known. Action sized.'
+      };
+    case 'cut':
+      return {
+        loreIntro: 'Extract only the signal from noisy rows.',
+        radioChatter: 'Iris: cut -d delim -f fields isolates columns.',
+        hint: 'cut -d , -f 1 file',
+        successLore: 'Columns isolated. Focus restored.'
+      };
+    case 'grep':
+      return {
+        loreIntro: 'Find the thread that ties the chaos together.',
+        radioChatter: 'Iris: grep finds; -i ignores case; -v inverts.',
+        hint: 'grep -i pattern file',
+        successLore: 'Pattern found. Signal elevated.'
+      };
+    case 'sort':
+      return {
+        loreIntro: 'Order reveals meaning when entropy reigns.',
+        radioChatter: 'Iris: sort -n numeric, -r reverse.',
+        hint: 'sort -n file',
+        successLore: 'Order imposed. Insight unlocked.'
+      };
+    case 'uniq':
+      return {
+        loreIntro: 'Repetition hides truth—condense without losing count.',
+        radioChatter: 'Iris: uniq expects sorted input; -c counts.',
+        hint: 'sort | uniq -c',
+        successLore: 'Duplicates collapsed. Frequencies mapped.'
+      };
+    case 'tr':
+      return {
+        loreIntro: 'Transform or delete characters—reshape the stream.',
+        radioChatter: "Iris: tr 'a-z' 'A-Z' or -d '0-9'",
+        hint: "tr 'a-z' 'A-Z'",
+        successLore: 'Stream reshaped as intended.'
+      };
+    case 'tee':
+      return {
+        loreIntro: 'Watch while you write—trust but verify.',
+        radioChatter: 'Iris: tee duplicates to stdout and files; -a appends.',
+        hint: '… | tee out.txt',
+        successLore: 'Captured without losing sight.'
+      };
+    case 'diff':
+      return {
+        loreIntro: 'Compare states; commit with confidence.',
+        radioChatter: 'Iris: diff prints nothing when equal.',
+        hint: 'diff a b',
+        successLore: 'Differences known. Decision clear.'
+      };
+    case 'file':
+      return {
+        loreIntro: 'Names lie—ask the system what it really is.',
+        radioChatter: 'Iris: file reports types and links.',
+        hint: 'file path',
+        successLore: 'Nature identified. Path chosen.'
+      };
+    case 'chmod':
+      return {
+        loreIntro: 'Gate access precisely; safety is policy, not accident.',
+        radioChatter: 'Iris: chmod 644/755; -R for trees.',
+        hint: 'chmod -R 755 dir',
+        successLore: 'Access aligned with intent.'
+      };
+    case 'chown':
+      return {
+        loreIntro: 'Custody clarified. Authority follows ownership.',
+        radioChatter: 'Iris: chown user:group target; add -R for trees.',
+        hint: 'chown root:root file',
+        successLore: 'Ownership transferred cleanly.'
+      };
+    case 'umask':
+      return {
+        loreIntro: 'Defaults decide futures—set discipline first.',
+        radioChatter: 'Iris: umask 027/077 before creation.',
+        hint: 'umask 027',
+        successLore: 'Defaults tightened. Safer by design.'
+      };
+    case 'systemctl':
+      return {
+        loreIntro: 'Services breathe life—enable, start, and observe.',
+        radioChatter: 'Iris: systemctl enable/start/status unit',
+        hint: 'systemctl status NAME',
+        successLore: 'Service state understood and controlled.'
+      };
+    case 'journalctl':
+      return {
+        loreIntro: 'Logs remember what we forget.',
+        radioChatter: 'Iris: journalctl tails the machine’s memory.',
+        hint: 'journalctl',
+        successLore: 'History read. Clues found.'
+      };
+    case 'logger':
+      return {
+        loreIntro: 'Write truth into the record.',
+        radioChatter: 'Iris: logger "message"',
+        hint: 'logger MESSAGE',
+        successLore: 'Event recorded for later.'
+      };
+    case 'mount':
+      return {
+        loreIntro: 'Attach new worlds; make data present.',
+        radioChatter: 'Iris: mount DEVICE MOUNTPOINT',
+        hint: 'mount /dev/sdb1 /mnt/data',
+        successLore: 'Volume attached. Paths extend.'
+      };
+    case 'umount':
+      return {
+        loreIntro: 'Detach carefully; leave nothing dirty.',
+        radioChatter: 'Iris: umount /mnt/data',
+        hint: 'umount MOUNTPOINT',
+        successLore: 'Volume safe to remove.'
+      };
+    case 'df':
+      return {
+        loreIntro: 'Capacity dictates strategy—measure first.',
+        radioChatter: 'Iris: df shows filesystem usage.',
+        hint: 'df',
+        successLore: 'Limits known. Plans adjusted.'
+      };
+    case 'du':
+      return {
+        loreIntro: 'Estimate weight before you lift.',
+        radioChatter: 'Iris: du -s DIR for a quick summary.',
+        hint: 'du -s DIR',
+        successLore: 'Burden estimated. Choices informed.'
+      };
+    case 'lsblk':
+      return {
+        loreIntro: 'See the hardware beneath the paths.',
+        radioChatter: 'Iris: lsblk lists block devices.',
+        hint: 'lsblk',
+        successLore: 'Topology mapped.'
+      };
+    case 'apt':
+      return {
+        loreIntro: 'Pull tools from the networked past.',
+        radioChatter: 'Iris: apt install/search',
+        hint: 'apt install nano',
+        successLore: 'Capability expanded.'
+      };
+    case 'dpkg':
+      return {
+        loreIntro: 'Audit what’s present—know your system.',
+        radioChatter: 'Iris: dpkg -l lists installations.',
+        hint: 'dpkg -l',
+        successLore: 'Inventory complete.'
+      };
+    case 'dnf':
+      return {
+        loreIntro: 'On RPM lands, use the right ship.',
+        radioChatter: 'Iris: dnf install NAME',
+        hint: 'dnf install curl',
+        successLore: 'Package deployed.'
+      };
+    case 'rpm':
+      return {
+        loreIntro: 'Verify what was installed.',
+        radioChatter: 'Iris: rpm -q NAME',
+        hint: 'rpm -q nano',
+        successLore: 'Presence confirmed.'
+      };
+    case 'ip':
+      return {
+        loreIntro: 'Interfaces, links, routes—shape the network’s flow.',
+        radioChatter: 'Iris: ip addr/link/route …',
+        hint: 'ip addr add 10.0.0.2/24 dev eth0',
+        successLore: 'Connectivity configured.'
+      };
+    case 'ping':
+      return {
+        loreIntro: 'Ask if the other side can hear you.',
+        radioChatter: 'Iris: ping host',
+        hint: 'ping example.com',
+        successLore: 'Reachability confirmed.'
       };
     case 'echo':
       return {

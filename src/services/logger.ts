@@ -1,6 +1,11 @@
 type Level = 'debug' | 'info' | 'warn' | 'error' | 'silent';
 
-let currentLevel: Level = (import.meta as any).env?.MODE === 'test' ? 'silent' : 'debug';
+const isTestMode = (() => {
+  const meta: unknown = typeof import.meta !== 'undefined' ? import.meta : undefined;
+  const env = (meta as { env?: { MODE?: string } } | undefined)?.env;
+  return env?.MODE === 'test';
+})();
+let currentLevel: Level = isTestMode ? 'silent' : 'debug';
 
 const levelOrder: Record<Level, number> = {
   debug: 10,

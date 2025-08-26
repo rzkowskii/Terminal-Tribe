@@ -7,11 +7,13 @@ const FinaleModal: React.FC = () => {
   const { setCurrentLevel, setActFilter } = useLevelStore();
   const closeRef = useRef<HTMLButtonElement>(null);
 
-  if (!showFinale) return null;
-
   useEffect(() => {
-    closeRef.current?.focus();
-  }, []);
+    if (showFinale) {
+      closeRef.current?.focus();
+    }
+  }, [showFinale]);
+
+  if (!showFinale) return null;
 
   return (
     <div className="fixed inset-0 z-50">

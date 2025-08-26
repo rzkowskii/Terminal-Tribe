@@ -2,257 +2,425 @@
   "levels": [
     {
       "id": 41,
-      "title": "Current Directory Reference",
-      "story": "Sometimes the answer lies right where you are. Acknowledge your current position.",
-      "task": "Refer to the current directory explicitly.",
-      "expectedCommand": "cd .",
-      "successMessage": "You remain in the current directory, ever aware of your surroundings."
-    },
-    {
-      "id": 42,
-      "title": "Directory Creation Redux",
-      "story": "Set up multiple new bases swiftly, including any required parent directories.",
-      "task": "Create multiple directories at once, ensuring all parent directories exist.",
-      "expectedCommand": "mkdir -p outpost/alpha/data",
-      "successMessage": "Outposts established efficiently."
-    },
-    {
-      "id": 43,
-      "title": "Safe Duplication",
-      "story": "Create backups of crucial directories without missing any files.",
-      "task": "Copy directories and their contents recursively.",
-      "expectedCommand": "cp -r source_dir backup_dir",
-      "successMessage": "Directories copied safely. Backups are secured."
-    },
-    {
-      "id": 44,
-      "title": "Code Rename",
-      "story": "For security, rename 'projectX' to 'projectY'.",
-      "task": "Rename a file or directory.",
-      "expectedCommand": "mv projectX projectY",
-      "successMessage": "Project code name updated successfully."
-    },
-    {
-      "id": 45,
-      "title": "Forced Removal",
-      "story": "Eliminate all traces of 'virus_scan' directories without any prompts.",
-      "task": "Remove directories and their contents forcefully.",
-      "expectedCommand": "rm -rf virus_scan",
-      "successMessage": "All traces removed silently and effectively."
-    },
-    {
-      "id": 46,
-      "title": "Clean Sweep",
-      "story": "Remove empty temporary directories to tidy up our file system.",
-      "task": "Remove empty directories named temp_empty.",
-      "expectedCommand": "rmdir temp_empty",
-      "successMessage": "Empty directories removed. System is cleaner now."
-    },
-    {
-      "id": 47,
-      "title": "Hard Link Verification",
-      "story": "Ensure that 'config_link' is a hard link to 'config_file'. Verify their connection.",
-      "task": "Check if two files are hard linked.",
-      "expectedCommand": "ls -i config_file config_link",
-      "successMessage": "Inspection complete. Entries listed with inode numbers.",
+      "title": "Unique Signals",
+      "story": "Iris murmurs: Some signals repeat. See the true variety.",
+      "task": "Collapse consecutive duplicates in sorted.txt.",
+      "expectedCommand": "uniq sorted.txt",
+      "successMessage": "Duplicates collapsed. Patterns emerge.",
+      "hint": "uniq expects sorted input.",
+      "conceptKeys": ["text-io"],
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "config_file": {
-            "type": "file",
-            "content": "cfg"
-          },
-          "config_link": {
-            "type": "file",
-            "content": "cfg"
-          }
+          "sorted.txt": { "type": "file", "content": "alpha\nalpha\nbeta\nbeta\nbeta\n" }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "config_file": {
-            "type": "file",
-            "content": "cfg"
-          },
-          "config_link": {
-            "type": "file",
-            "content": "cfg"
-          }
+          "sorted.txt": { "type": "file", "content": "alpha\nalpha\nbeta\nbeta\nbeta\n" }
+        }
+      }
+    },
+    {
+      "id": 42,
+      "title": "Count Distinct",
+      "story": "Iris: Quantity tells a story too. Count each burst.",
+      "task": "Show counts for each unique line in sorted.txt.",
+      "expectedCommand": "uniq -c sorted.txt",
+      "successMessage": "Occurrences tallied. Density mapped.",
+      "hint": "Use -c to prefix counts.",
+      "conceptKeys": ["text-io"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "sorted.txt": { "type": "file", "content": "alpha\nalpha\nbeta\nbeta\nbeta\n" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "sorted.txt": { "type": "file", "content": "alpha\nalpha\nbeta\nbeta\nbeta\n" }
+        }
+      }
+    },
+    {
+      "id": 43,
+      "title": "Shout the Message",
+      "story": "Iris smiles: Make the quiet loud.",
+      "task": "Uppercase the word 'hello' via a pipeline.",
+      "expectedCommand": "echo hello | tr 'a-z' 'A-Z'",
+      "successMessage": "Converted to uppercase.",
+      "hint": "Pipe echo into tr.",
+      "conceptKeys": ["redirection", "text-io"],
+      "initialState": { "currentDirectory": "/home/recruit", "files": {} },
+      "expectedState": { "currentDirectory": "/home/recruit", "files": {} }
+    },
+    {
+      "id": 44,
+      "title": "Scrub Digits",
+      "story": "Iris: Strip the noise, leave the signal.",
+      "task": "Remove digits from the string 'code123'.",
+      "expectedCommand": "echo code123 | tr -d '0-9'",
+      "successMessage": "Noise removed. Signal remains.",
+      "hint": "Use tr -d to delete characters.",
+      "conceptKeys": ["text-io"],
+      "initialState": { "currentDirectory": "/home/recruit", "files": {} },
+      "expectedState": { "currentDirectory": "/home/recruit", "files": {} }
+    },
+    {
+      "id": 45,
+      "title": "Mirror to File",
+      "story": "Iris: Keep a copy while you watch the stream.",
+      "task": "Write 'config=1' to config.conf while also printing it.",
+      "expectedCommand": "echo config=1 | tee config.conf",
+      "successMessage": "Stream mirrored to file.",
+      "hint": "tee writes stdin to files and stdout.",
+      "conceptKeys": ["redirection"],
+      "initialState": { "currentDirectory": "/home/recruit", "files": {} },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "config.conf": { "type": "file", "content": "config=1" }
+        }
+      }
+    },
+    {
+      "id": 46,
+      "title": "Append Settings",
+      "story": "Iris: Build your config one truth at a time.",
+      "task": "Append 'user=bob' to config.conf while showing it.",
+      "expectedCommand": "echo user=bob | tee -a config.conf",
+      "successMessage": "Content appended.",
+      "hint": "-a appends instead of overwriting.",
+      "conceptKeys": ["redirection"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "config.conf": { "type": "file", "content": "config=1" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "config.conf": { "type": "file", "content": "config=1user=bob" }
+        }
+      }
+    },
+    {
+      "id": 47,
+      "title": "Spot the Difference",
+      "story": "Iris: Compare revisions before you commit.",
+      "task": "Compare a.conf and b.conf.",
+      "expectedCommand": "diff a.conf b.conf",
+      "successMessage": "Differences reported.",
+      "hint": "diff prints nothing when files match.",
+      "conceptKeys": ["compare"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "a.conf": { "type": "file", "content": "port=80" },
+          "b.conf": { "type": "file", "content": "port=8080" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "a.conf": { "type": "file", "content": "port=80" },
+          "b.conf": { "type": "file", "content": "port=8080" }
         }
       }
     },
     {
       "id": 48,
-      "title": "Dangling Links",
-      "story": "Identify any symbolic links that are no longer valid.",
-      "task": "Find a symbolic link that points to a non-existing file.",
-      "expectedCommand": "ls -l",
-      "successMessage": "Dangling symbolic links have been identified."
-    },
-    {
-      "id": 49,
-      "title": "Physical Navigation",
-      "story": "Navigate using the actual directory structure, ignoring any symbolic links.",
-      "task": "Change directories without following symbolic links.",
-      "expectedCommand": "cd -P /home/recruit",
-      "successMessage": "Navigated physically to the specified directory.",
+      "title": "Know Thy Files",
+      "story": "Iris: Names deceive. Ask the system what it is.",
+      "task": "Identify the type of notes.txt.",
+      "expectedCommand": "file notes.txt",
+      "successMessage": "Type identified.",
+      "hint": "file prints 'directory', 'symbolic link', or 'ASCII text'.",
+      "conceptKeys": ["compare"],
       "initialState": {
-        "currentDirectory": "/home/recruit/docs_link",
+        "currentDirectory": "/home/recruit",
         "files": {
-          "docs": {
-            "type": "directory",
-            "files": {}
-          },
-          "docs_link": {
-            "type": "symlink",
-            "target": "docs",
-            "permissions": "lrwxrwxrwx",
-            "owner": "recruit",
-            "group": "tribe"
-          }
+          "notes.txt": { "type": "file", "content": "remember to rotate keys" }
         }
       },
       "expectedState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "docs": {
-            "type": "directory",
-            "files": {}
-          },
-          "docs_link": {
-            "type": "symlink",
-            "target": "docs",
-            "permissions": "lrwxrwxrwx",
-            "owner": "recruit",
-            "group": "tribe"
-          }
+          "notes.txt": { "type": "file", "content": "remember to rotate keys" }
+        }
+      }
+    },
+    {
+      "id": 49,
+      "title": "Error Frequency",
+      "story": "Iris: Filter noise, sort signals, count hits.",
+      "task": "Show counts of case-insensitive 'error' lines in logs.txt.",
+      "expectedCommand": "grep -i error logs.txt | sort | uniq -c",
+      "successMessage": "Errors quantified.",
+      "hint": "Chain grep → sort → uniq -c.",
+      "conceptKeys": ["search", "regex"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "logs.txt": { "type": "file", "content": "info ok\nERROR timeout\nError disk\nwarn minor\nerror timeout\n" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "logs.txt": { "type": "file", "content": "info ok\nERROR timeout\nError disk\nwarn minor\nerror timeout\n" }
         }
       }
     },
     {
       "id": 50,
-      "title": "Alpha Patterns",
-      "story": "List all files that start with an alphabetic character.",
-      "task": "Use pattern matching for alphabetic characters.",
-      "expectedCommand": "ls [[:alpha:]]*",
-      "successMessage": "Alphabetic files listed successfully."
-    },
-    {
-      "id": 51,
-      "title": "Lowercase Files",
-      "story": "Find all files that begin with a lowercase letter.",
-      "task": "Match files starting with lowercase letters.",
-      "expectedCommand": "ls [[:lower:]]*",
-      "successMessage": "Lowercase-named files have been found."
-    },
-    {
-      "id": 52,
-      "title": "Uppercase Directories",
-      "story": "Access directories starting with uppercase letters—they may contain important protocols.",
-      "task": "List directories starting with uppercase letters.",
-      "expectedCommand": "ls -d [[:upper:]]*",
-      "successMessage": "Uppercase directories are now listed."
-    },
-    {
-      "id": 53,
-      "title": "Alphanumeric Search",
-      "story": "Compile a list of files that contain either letters or numbers.",
-      "task": "Match files with alphanumeric characters.",
-      "expectedCommand": "ls *[[:alnum:]]*",
-      "successMessage": "Files with letters or numbers have been compiled."
-    },
-    {
-      "id": 54,
-      "title": "Whitespace Files",
-      "story": "Identify files that have whitespace in their names—they might be suspicious.",
-      "task": "List files matching whitespace characters.",
-      "expectedCommand": "ls *[[:space:]]*",
-      "successMessage": "Files with whitespace detected."
-    },
-    {
-      "id": 55,
-      "title": "Punctuated Files",
-      "story": "Locate files that include punctuation in their names.",
-      "task": "Match files with punctuation characters.",
-      "expectedCommand": "ls *[[:punct:]]*",
-      "successMessage": "Punctuated files located."
-    },
-    {
-      "id": 56,
-      "title": "User Homes",
-      "story": "Access the home directory of user 'agent47' to retrieve sensitive data.",
-      "task": "Use tilde expansion for a specific user.",
-      "expectedCommand": "cd ~agent47",
-      "successMessage": "Entered agent47's home directory.",
+      "title": "Role Histogram",
+      "story": "Iris: Who does what, and how often?",
+      "task": "Count unique roles (2nd CSV field) in users.csv.",
+      "expectedCommand": "cut -d , -f 2 users.csv | sort | uniq -c",
+      "successMessage": "Roles tallied.",
+      "hint": "cut → sort → uniq -c.",
+      "conceptKeys": ["text-io"],
       "initialState": {
         "currentDirectory": "/home/recruit",
         "files": {
-          "home": {
-            "type": "directory",
-            "files": {
-              "recruit": {
-                "type": "directory",
-                "files": {}
-              },
-              "agent47": {
-                "type": "directory",
-                "files": {}
-              }
-            }
-          }
+          "users.csv": { "type": "file", "content": "alice,admin\nbob,user\ncarol,admin\n" }
         }
       },
       "expectedState": {
-        "currentDirectory": "/home/agent47",
+        "currentDirectory": "/home/recruit",
         "files": {
-          "home": {
-            "type": "directory",
-            "files": {
-              "recruit": {
-                "type": "directory",
-                "files": {}
-              },
-              "agent47": {
-                "type": "directory",
-                "files": {}
-              }
-            }
-          }
+          "users.csv": { "type": "file", "content": "alice,admin\nbob,user\ncarol,admin\n" }
+        }
+      }
+    },
+    {
+      "id": 51,
+      "title": "Top Line Export",
+      "story": "Iris: Save the headline for the brief.",
+      "task": "Write the first line of report.txt into top.txt.",
+      "expectedCommand": "head -n 1 report.txt > top.txt",
+      "successMessage": "Headline saved.",
+      "hint": "Use head with stdout redirection.",
+      "conceptKeys": ["redirection"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "report.txt": { "type": "file", "content": "ALERT\nNOTICE\nINFO\n" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "report.txt": { "type": "file", "content": "ALERT\nNOTICE\nINFO\n" },
+          "top.txt": { "type": "file", "content": "ALERT" }
+        }
+      }
+    },
+    {
+      "id": 52,
+      "title": "Tail Archive",
+      "story": "Iris: Keep the last whispers for records.",
+      "task": "Append the last 2 lines of report.txt into tail.txt.",
+      "expectedCommand": "tail -n 2 report.txt >> tail.txt",
+      "successMessage": "Tail captured.",
+      "hint": "Use >> to append.",
+      "conceptKeys": ["redirection"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "report.txt": { "type": "file", "content": "ALPHA\nBETA\nGAMMA\nDELTA\n" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "report.txt": { "type": "file", "content": "ALPHA\nBETA\nGAMMA\nDELTA\n" },
+          "tail.txt": { "type": "file", "content": "GAMMA\nDELTA" }
+        }
+      }
+    },
+    {
+      "id": 53,
+      "title": "Activate Config",
+      "story": "Iris: Strip comments; keep only live directives.",
+      "task": "Write non-comment lines from config.ini to active.conf.",
+      "expectedCommand": "grep -v ^# config.ini > active.conf",
+      "successMessage": "Active config generated.",
+      "hint": "^# matches comment lines.",
+      "conceptKeys": ["search", "redirection"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "config.ini": { "type": "file", "content": "# init\nalpha=1\n# comment\nbeta=2\nGamma=3\n" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "config.ini": { "type": "file", "content": "# init\nalpha=1\n# comment\nbeta=2\nGamma=3\n" },
+          "active.conf": { "type": "file", "content": "alpha=1\nbeta=2\nGamma=3" }
+        }
+      }
+    },
+    {
+      "id": 54,
+      "title": "Names Rollup",
+      "story": "Iris: Extract identities and sort them for muster.",
+      "task": "Write the first CSV field of users.csv, sorted, to names.txt.",
+      "expectedCommand": "cut -d , -f 1 users.csv | sort > names.txt",
+      "successMessage": "Names listed.",
+      "hint": "cut -d , -f 1 | sort > file",
+      "conceptKeys": ["text-io", "redirection"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "users.csv": { "type": "file", "content": "carol,admin\nalice,user\nbob,user\n" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "users.csv": { "type": "file", "content": "carol,admin\nalice,user\nbob,user\n" },
+          "names.txt": { "type": "file", "content": "alice\nbob\ncarol" }
+        }
+      }
+    },
+    {
+      "id": 55,
+      "title": "Uppercase File",
+      "story": "Iris: Redirect the stream in, transform, and save.",
+      "task": "Uppercase slogan.txt into upper.txt using stdin redirection.",
+      "expectedCommand": "tr 'a-z' 'A-Z' < slogan.txt > upper.txt",
+      "successMessage": "Converted and saved.",
+      "hint": "Use < for stdin and > for stdout.",
+      "conceptKeys": ["redirection"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "slogan.txt": { "type": "file", "content": "trust but verify" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "slogan.txt": { "type": "file", "content": "trust but verify" },
+          "upper.txt": { "type": "file", "content": "TRUST BUT VERIFY" }
+        }
+      }
+    },
+    {
+      "id": 56,
+      "title": "Split the Stream",
+      "story": "Iris: One stream, many sinks.",
+      "task": "Write 'OK' simultaneously to a.log and b.log.",
+      "expectedCommand": "echo OK | tee a.log b.log",
+      "successMessage": "Stream duplicated.",
+      "hint": "tee can target multiple files.",
+      "conceptKeys": ["redirection"],
+      "initialState": { "currentDirectory": "/home/recruit", "files": {} },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "a.log": { "type": "file", "content": "OK" },
+          "b.log": { "type": "file", "content": "OK" }
         }
       }
     },
     {
       "id": 57,
-      "title": "File Series Creation",
-      "story": "Generate files for phases 1 to 5 of the operation.",
-      "task": "Create files named phase1.txt to phase5.txt using brace expansion.",
-      "expectedCommand": "touch phase{1..5}.txt",
-      "successMessage": "Files for all phases have been created."
+      "title": "Confirm Equality",
+      "story": "Iris: Trust is good. Verify is better.",
+      "task": "Compare same1.txt and same2.txt.",
+      "expectedCommand": "diff same1.txt same2.txt",
+      "successMessage": "Equality confirmed (no output).",
+      "hint": "diff prints nothing when files match.",
+      "conceptKeys": ["compare"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "same1.txt": { "type": "file", "content": "alpha" },
+          "same2.txt": { "type": "file", "content": "alpha" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "same1.txt": { "type": "file", "content": "alpha" },
+          "same2.txt": { "type": "file", "content": "alpha" }
+        }
+      }
     },
     {
       "id": 58,
-      "title": "Variable Review",
-      "story": "Double-check the code name stored in our variable to ensure mission integrity.",
-      "task": "Display the value of the variable MISSION_CODE.",
-      "expectedCommand": "echo ${MISSION_CODE}",
-      "successMessage": "Mission code confirmed as '${MISSION_CODE}'."
+      "title": "Directory or File?",
+      "story": "Iris: Form and function—ask the system.",
+      "task": "Identify docs using file.",
+      "expectedCommand": "file docs",
+      "successMessage": "Type identified.",
+      "hint": "file path",
+      "conceptKeys": ["compare"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "docs": { "type": "directory", "files": {} }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "docs": { "type": "directory", "files": {} }
+        }
+      }
     },
     {
       "id": 59,
-      "title": "Dollar Sign Protection",
-      "story": "Document the finance report without variable expansion interfering.",
-      "task": "Echo a string containing a dollar sign without triggering variable expansion.",
-      "expectedCommand": "echo \"\\$1000 allocated for equipment\"",
-      "successMessage": "Finance report documented accurately."
+      "title": "Word Count to File",
+      "story": "Iris: Summarize, then store.",
+      "task": "Count words in essay.txt and write to wc.txt.",
+      "expectedCommand": "wc -w essay.txt > wc.txt",
+      "successMessage": "Count saved.",
+      "hint": "wc -w file > out",
+      "conceptKeys": ["redirection"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "essay.txt": { "type": "file", "content": "one two three four" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "essay.txt": { "type": "file", "content": "one two three four" },
+          "wc.txt": { "type": "file", "content": "4" }
+        }
+      }
     },
     {
       "id": 60,
-      "title": "Non-existent User Check",
-      "story": "Attempt to access the home directory of a user we suspect doesn't exist to test system responses.",
-      "task": "Expand ~nonexistentuser in the shell.",
-      "expectedCommand": "echo ~nonexistentuser",
-      "successMessage": "Result: ~nonexistentuser. User does not exist, as suspected."
+      "title": "Alpha Density",
+      "story": "Iris: Extract signal alpha and quantify it.",
+      "task": "Case-insensitive filter 'alpha' in mix.txt, then sort and count to alpha.count.",
+      "expectedCommand": "grep -i alpha mix.txt | sort | uniq -c > alpha.count",
+      "successMessage": "Alpha frequency stored.",
+      "hint": "grep -i | sort | uniq -c > file",
+      "conceptKeys": ["search", "redirection"],
+      "initialState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "mix.txt": { "type": "file", "content": "alpha\nbeta\nAlpha\nalpha\n" }
+        }
+      },
+      "expectedState": {
+        "currentDirectory": "/home/recruit",
+        "files": {
+          "mix.txt": { "type": "file", "content": "alpha\nbeta\nAlpha\nalpha\n" },
+          "alpha.count": { "type": "file", "content": "1 Alpha\n2 alpha" }
+        }
+      }
     }
   ]
 }

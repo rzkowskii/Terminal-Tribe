@@ -19,7 +19,11 @@ interface TerminalUiState extends TerminalStore {
   updateISearch: (q: string) => void;
 }
 
-const BUILTIN_COMMANDS = ['help','pwd','ls','cd','touch','mkdir','cp','mv','rm','rmdir','ln','echo','clear'];
+const BUILTIN_COMMANDS = [
+  'help','pwd','ls','cd','touch','mkdir','cp','mv','rm','rmdir','ln','echo','clear',
+  // Extended builtins
+  'cat','tar','sha256sum','ps','kill','nice','jobs','bg','fg','crontab'
+];
 
 const useTerminalStore = create<TerminalUiState>((set, get) => ({
   commandHistory: [],
@@ -96,10 +100,11 @@ const useTerminalStore = create<TerminalUiState>((set, get) => ({
     const namePrefix = last.slice(pathPrefix.length);
     // naive listing of CWD entries
     const pathParts = (pathPrefix.startsWith('/') ? pathPrefix : joinPath(cwd, pathPrefix)).split('/').filter(Boolean);
-    let node: any = currentFileSystem.files;
+    type FsDir = { [name: string]: { type: 'file' | 'directory' | 'symlink'; files?: FsDir } };
+    let node: FsDir | null = currentFileSystem.files as unknown as FsDir;
     for (const seg of pathParts) {
       if (!node || node[seg]?.type !== 'directory') { node = null; break; }
-      node = node[seg].files;
+      node = (node[seg].files || null) as FsDir | null;
     }
     const entries = node ? Object.keys(node) : [];
     const matches = entries.filter(e => e.startsWith(namePrefix));

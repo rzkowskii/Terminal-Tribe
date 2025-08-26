@@ -1,4 +1,4 @@
-import { deriveSuggestions, SUGGESTION_RULES } from '../../utils/suggestions';
+import { deriveSuggestions } from '../../utils/suggestions';
 import type { CommandEvent } from '../../stores/telemetryStore';
 
 describe('deriveSuggestions', () => {
