@@ -184,9 +184,7 @@
 
       .signal {
         display: grid;
-        grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
-        gap: 18px;
-        align-items: center;
+        gap: 14px;
         padding: 14px;
       }
 
@@ -202,6 +200,80 @@
         margin: 0;
         color: var(--muted);
         font-size: 0.9rem;
+      }
+
+      .screenshots {
+        padding: 34px 0 36px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section-label {
+        margin: 0 0 10px;
+        color: var(--amber);
+        font-size: 0.85rem;
+      }
+
+      .screenshots h2 {
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+      }
+
+      .screenshots > p {
+        max-width: 760px;
+        color: var(--muted);
+      }
+
+      .shot-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .shot {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .shot img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        object-position: center top;
+        border-bottom: 1px solid var(--line);
+        background: #050806;
+      }
+
+      .shot.featured {
+        display: grid;
+        grid-column: 1 / -1;
+        grid-template-columns: minmax(0, 2fr) minmax(260px, 0.75fr);
+      }
+
+      .shot.featured img {
+        height: 100%;
+        min-height: 430px;
+        aspect-ratio: auto;
+        border-right: 1px solid var(--line);
+        border-bottom: 0;
+      }
+
+      .shot div {
+        padding: 14px;
+      }
+
+      .shot h3 {
+        margin: 0 0 6px;
+        color: var(--text);
+        font-size: 0.95rem;
+      }
+
+      .shot p {
+        color: var(--muted);
+        font-size: 0.86rem;
       }
 
       .grid {
@@ -291,7 +363,9 @@
         .hero,
         .sections,
         .grid,
-        .signal {
+        .signal,
+        .shot-grid,
+        .shot.featured {
           grid-template-columns: 1fr;
         }
 
@@ -315,6 +389,13 @@
         .signal {
           padding: 12px;
         }
+
+        .shot.featured img {
+          min-height: 0;
+          aspect-ratio: 16 / 10;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
       }
     </style>
   </head>
@@ -327,13 +408,14 @@
 
       <section class="hero" aria-labelledby="title">
         <div>
-          <p class="eyebrow">briefing // first operation</p>
-          <h1 id="title">Your first operation starts here.</h1>
+          <p class="eyebrow">briefing // live operation</p>
+          <h1 id="title">Your first operation starts at the command line.</h1>
           <p class="lead">
             TerminalTribe teaches Linux terminal skills through a safe simulated
             shell, authored missions, recovered field notes, and visible proof
-            that each command did something useful. This public repository is a
-            promotional pointer; source code is not available here.
+            that each command did something useful. Open Campaign 1, read the
+            objective, type the command, and watch the route change. This GitHub
+            page is the pointer, not the source tree.
           </p>
           <div class="actions">
             <a class="button" href="https://terminaltribe.com/">Play TerminalTribe</a>
@@ -361,14 +443,15 @@
           <div class="signal">
             <img
               class="preview"
-              src="https://terminaltribe.com/social-preview.png"
-              alt="TerminalTribe terminal faceplate with green cursor and amber field stamp"
-              width="1200"
-              height="630"
+              src="screenshots/operator-desk.jpg"
+              alt="TerminalTribe live site operator desk with the Begin free Campaign 1 action"
+              width="1280"
+              height="900"
             >
             <p>
-              The live game turns small shell moves into mission progress:
-              inspect, create, copy, recover, and understand what changed.
+              Actual live site screenshot. Campaign 1 starts in the browser with
+              no account required, then hands you a terminal, a task, and a reason
+              to care about the command.
             </p>
           </div>
         </aside>
@@ -390,6 +473,54 @@
         <div class="stat">
           <strong>No</strong>
           <span>account required for Campaign 1</span>
+        </div>
+      </section>
+
+      <section class="screenshots" aria-labelledby="live-screenshots">
+        <p class="section-label">field evidence // screenshots from play</p>
+        <h2 id="live-screenshots">Actual gameplay, not a source-code mirror</h2>
+        <p>
+          These captures come from the live TerminalTribe site: objective, typed
+          command, level-clear proof, and the field notebook that unlocks as you
+          learn.
+        </p>
+        <div class="shot-grid">
+          <article class="shot featured">
+            <img
+              src="screenshots/first-objective.jpg"
+              alt="TerminalTribe gameplay showing the first pwd objective and command mentor"
+              width="1200"
+              height="841"
+            >
+            <div>
+              <h3>Read the objective</h3>
+              <p>The level frames the shell command as a mission action, with hints and mentor context nearby.</p>
+            </div>
+          </article>
+          <article class="shot">
+            <img
+              src="screenshots/level-cleared.jpg"
+              alt="TerminalTribe gameplay after clearing the pwd level"
+              width="1280"
+              height="900"
+            >
+            <div>
+              <h3>Run the command</h3>
+              <p>Terminal output becomes progress, after-action proof, and an unlocked command reference.</p>
+            </div>
+          </article>
+          <article class="shot">
+            <img
+              src="screenshots/field-notebook.jpg"
+              alt="TerminalTribe field notebook command reference for pwd"
+              width="1280"
+              height="900"
+            >
+            <div>
+              <h3>Keep the evidence</h3>
+              <p>The field notebook turns each learned command into a reference you can revisit.</p>
+            </div>
+          </article>
         </div>
       </section>
 
