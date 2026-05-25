@@ -3,14 +3,323 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="refresh" content="0; url=https://www.terminaltribe.com/">
-    <link rel="canonical" href="https://www.terminaltribe.com/">
+    <meta name="robots" content="noindex, follow">
+    <meta name="description" content="TerminalTribe is a story-driven browser game for learning Linux terminal skills.">
+    <link rel="canonical" href="https://terminaltribe.com/">
+    <link rel="icon" href="https://terminaltribe.com/favicon.ico" sizes="any">
+    <link rel="icon" href="https://terminaltribe.com/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="https://terminaltribe.com/apple-touch-icon.png">
+    <meta property="og:title" content="TerminalTribe">
+    <meta property="og:description" content="Learn Linux terminal skills through a story-driven browser game.">
+    <meta property="og:image" content="https://terminaltribe.com/social-preview.png">
+    <meta property="og:url" content="https://terminaltribe.com/">
+    <meta name="twitter:card" content="summary_large_image">
     <title>TerminalTribe</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0d0f0c;
+        --panel: #151711;
+        --panel-soft: #1d2018;
+        --text: #f0ead6;
+        --muted: #b8b08f;
+        --line: #414632;
+        --green: #9fe870;
+        --amber: #f5b950;
+        --red: #de6b59;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(180deg, #11150f 0%, var(--bg) 44%, #090b08 100%);
+        color: var(--text);
+        font-family:
+          ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          Monaco,
+          Consolas,
+          "Liberation Mono",
+          monospace;
+        line-height: 1.55;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0 48px;
+      }
+
+      .topline {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: center;
+        padding: 14px 0 26px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .status {
+        color: var(--green);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 430px);
+        gap: 36px;
+        align-items: center;
+        padding: 44px 0 42px;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .eyebrow {
+        color: var(--amber);
+        font-size: 0.9rem;
+        margin: 0 0 14px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 4.6rem;
+        line-height: 0.95;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        max-width: 720px;
+        margin: 24px 0 0;
+        color: var(--muted);
+        font-size: 1.2rem;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 18px;
+        border: 1px solid var(--green);
+        border-radius: 6px;
+        background: var(--green);
+        color: #091006;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .button.secondary {
+        border-color: var(--line);
+        background: transparent;
+        color: var(--text);
+      }
+
+      .preview {
+        display: block;
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: 0 18px 80px rgba(0, 0, 0, 0.42);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1px;
+        margin-top: 32px;
+        border: 1px solid var(--line);
+        background: var(--line);
+      }
+
+      .stat,
+      .section {
+        background: var(--panel);
+        padding: 22px;
+      }
+
+      .stat strong {
+        display: block;
+        color: var(--green);
+        font-size: 2rem;
+        line-height: 1;
+      }
+
+      .stat span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .sections {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1px;
+        margin-top: 1px;
+        border: 1px solid var(--line);
+        border-top: 0;
+        background: var(--line);
+      }
+
+      h2 {
+        margin: 0 0 12px;
+        color: var(--text);
+        font-size: 1.05rem;
+        letter-spacing: 0;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      .section p,
+      .section li {
+        color: var(--muted);
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .note {
+        margin-top: 32px;
+        padding: 18px 0 0;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .prompt {
+        color: var(--green);
+      }
+
+      .danger {
+        color: var(--red);
+      }
+
+      @media (max-width: 800px) {
+        .hero,
+        .sections,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .topline {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        h1 {
+          font-size: 2.8rem;
+        }
+
+        .lead {
+          font-size: 1rem;
+        }
+      }
+    </style>
   </head>
   <body>
-    <p>
-      TerminalTribe is available at
-      <a href="https://www.terminaltribe.com/">terminaltribe.com</a>.
-    </p>
+    <main class="shell">
+      <header class="topline" aria-label="Project status">
+        <span><span class="prompt">$</span> terminaltribe --briefing</span>
+        <span class="status">public project pointer</span>
+      </header>
+
+      <section class="hero" aria-labelledby="title">
+        <div>
+          <p class="eyebrow">A story-driven browser game for learning Linux terminal skills</p>
+          <h1 id="title">TerminalTribe</h1>
+          <p class="lead">
+            Type real shell-shaped commands in a safe simulated terminal, recover
+            field documents, and build practical command-line confidence through
+            authored missions.
+          </p>
+          <div class="actions">
+            <a class="button" href="https://terminaltribe.com/">Play TerminalTribe</a>
+            <a class="button secondary" href="https://github.com/rzkowskii/Terminal-Tribe">View GitHub Pointer</a>
+          </div>
+        </div>
+        <img
+          class="preview"
+          src="https://terminaltribe.com/social-preview.png"
+          alt="TerminalTribe terminal faceplate with green cursor and amber field stamp"
+          width="1200"
+          height="630"
+        >
+      </section>
+
+      <section class="grid" aria-label="Playable content">
+        <div class="stat">
+          <strong>90</strong>
+          <span>free Campaign 1 missions</span>
+        </div>
+        <div class="stat">
+          <strong>450</strong>
+          <span>continuation campaign missions</span>
+        </div>
+        <div class="stat">
+          <strong>45</strong>
+          <span>Advanced Operations labs</span>
+        </div>
+      </section>
+
+      <section class="sections" aria-label="Product summary">
+        <article class="section">
+          <h2>Start Free</h2>
+          <p>
+            Campaign 1 runs in the browser without account or payment, covering
+            movement, inspection, file operations, links, search, archives, and
+            recovery habits.
+          </p>
+        </article>
+        <article class="section">
+          <h2>Complete Unlock</h2>
+          <p>
+            Unlock the continuation campaigns plus Advanced Operations tracks for
+            Data Operator, Shell Automation, and Incident Response practice.
+          </p>
+        </article>
+        <article class="section">
+          <h2>Learn By Operating</h2>
+          <p>
+            TerminalTribe avoids throwaway drills. Each command is tied to a
+            mission, a recovered artifact, and a clearer sense of what the shell
+            just did.
+          </p>
+        </article>
+        <article class="section">
+          <h2>Public GitHub Role</h2>
+          <p>
+            This repository is a promotional pointer. The game source code is
+            not published here; the playable product lives at TerminalTribe.com.
+          </p>
+        </article>
+      </section>
+
+      <p class="note">
+        <span class="danger">note:</span> This GitHub Pages surface is not the
+        canonical site. Search engines should index
+        <a href="https://terminaltribe.com/">terminaltribe.com</a> instead.
+      </p>
+    </main>
   </body>
 </html>
