@@ -141,7 +141,7 @@
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 1px;
         margin-top: 32px;
         border: 1px solid var(--line);
@@ -235,6 +235,12 @@
           font-size: 1rem;
         }
       }
+
+      @media (min-width: 801px) and (max-width: 1000px) {
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
     </style>
   </head>
   <body>
@@ -268,6 +274,10 @@
       </section>
 
       <section class="grid" aria-label="Playable content">
+        <div class="stat">
+          <strong>585</strong>
+          <span>authored playable levels</span>
+        </div>
         <div class="stat">
           <strong>90</strong>
           <span>free Campaign 1 missions</span>
