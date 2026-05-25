@@ -68,10 +68,3 @@ understanding of what the shell just did.
 Campaign 1 is free to play in the browser without an account or payment.
 Complete Unlock opens the continuation campaigns and Advanced Operations tracks
 for Data Operator, Shell Automation, and Incident Response practice.
-
-## Why This Exists On GitHub
-
-This repo keeps the old GitHub project link useful without exposing the game
-source tree. The canonical site is:
-
-[https://terminaltribe.com/](https://terminaltribe.com/)
