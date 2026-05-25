@@ -2,47 +2,52 @@
 
 [![TerminalTribe preview](https://terminaltribe.com/social-preview.png)](https://terminaltribe.com/)
 
-**TerminalTribe is a story-driven browser game for learning Linux terminal
-skills.**
+**Your first operation starts at the command line.**
+
+TerminalTribe is a story-driven browser game for learning Linux terminal
+skills. You type shell-shaped commands in a safe simulated terminal, recover
+field documents, and build practical command-line confidence through authored
+missions.
 
 [Play TerminalTribe](https://terminaltribe.com/)
 
-## What It Is
+## Field Briefing
 
-TerminalTribe turns command-line practice into a post-apocalyptic field
-operation. You learn by typing real shell-shaped commands in a safe simulated
-terminal, recovering documents, moving through authored missions, and building
-confidence with the Linux command line.
+TerminalTribe is built around a simple loop:
 
-The current game includes **585 authored playable levels**:
+```text
+mission: recover the relay map
+$ pwd
+/outpost
+$ ls
+archive  field-notes  relay
+$ mkdir evidence
+$ cp archive/map.txt evidence/
+evidence filed: map.txt
+```
+
+Each command is tied to a mission result, a recovered artifact, and a clearer
+understanding of what the shell just did.
+
+## What Is Included
 
 | Area | Included |
 | --- | ---: |
-| Campaign 1 | 90 free levels |
-| Continuation Campaigns 2-6 | 450 levels |
+| Campaign 1 | 90 free missions |
+| Continuation Campaigns 2-6 | 450 missions |
 | Advanced Operations | 45 labs |
+| Total authored playable content | 585 levels |
 
-## Start Free
+Campaign 1 is free to play in the browser without an account or payment.
+Complete Unlock opens the continuation campaigns and Advanced Operations tracks
+for Data Operator, Shell Automation, and Incident Response practice.
 
-Campaign 1 is free to play in the browser without an account or payment. It
-introduces practical terminal movement, file inspection, creation, copying,
-moving, removal, links, search, archives, and beginner recovery habits.
+## Why This Exists On GitHub
 
-## Complete Unlock
+This repository is the public GitHub pointer for TerminalTribe. It exists so
+the old project link leads to a useful briefing instead of an exposed source
+tree.
 
-Complete Unlock opens the continuation campaigns and Advanced Operations labs:
-
-- Campaigns 2-6 continue the main route with 450 authored missions.
-- Advanced Operations adds Data Operator, Shell Automation, and Incident
-  Response tracks.
-- Accounts and cloud save are designed for carrying progress between devices.
-
-## Why This Repository Has No Source Code
-
-This public repository is a promotional pointer for TerminalTribe. The source
-code is not published here.
-
-Use this repo as the stable GitHub link for the project. To play, visit:
+The game source code is not published here. To play, visit:
 
 [https://terminaltribe.com/](https://terminaltribe.com/)
-

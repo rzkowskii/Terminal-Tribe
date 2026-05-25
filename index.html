@@ -10,17 +10,17 @@
     <link rel="icon" href="https://terminaltribe.com/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="https://terminaltribe.com/apple-touch-icon.png">
     <meta property="og:title" content="TerminalTribe">
-    <meta property="og:description" content="Learn Linux terminal skills through a story-driven browser game.">
+    <meta property="og:description" content="Your first operation starts at the command line.">
     <meta property="og:image" content="https://terminaltribe.com/social-preview.png">
     <meta property="og:url" content="https://terminaltribe.com/">
     <meta name="twitter:card" content="summary_large_image">
-    <title>TerminalTribe</title>
+    <title>TerminalTribe Field Briefing</title>
     <style>
       :root {
         color-scheme: dark;
         --bg: #0d0f0c;
         --panel: #151711;
-        --panel-soft: #1d2018;
+        --panel-strong: #10130f;
         --text: #f0ead6;
         --muted: #b8b08f;
         --line: #414632;
@@ -36,7 +36,7 @@
       body {
         margin: 0;
         min-height: 100vh;
-        background: linear-gradient(180deg, #11150f 0%, var(--bg) 44%, #090b08 100%);
+        background: linear-gradient(180deg, #11150f 0%, var(--bg) 46%, #090b08 100%);
         color: var(--text);
         font-family:
           ui-monospace,
@@ -65,6 +65,7 @@
         gap: 20px;
         align-items: center;
         padding: 14px 0 26px;
+        border-bottom: 1px solid var(--line);
         color: var(--muted);
         font-size: 0.88rem;
       }
@@ -73,13 +74,17 @@
         color: var(--green);
       }
 
+      .prompt {
+        color: var(--green);
+      }
+
       .hero {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(280px, 430px);
+        grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1fr);
         gap: 36px;
         align-items: center;
-        padding: 44px 0 42px;
-        border-top: 1px solid var(--line);
+        min-height: 640px;
+        padding: 46px 0 42px;
         border-bottom: 1px solid var(--line);
       }
 
@@ -91,16 +96,17 @@
 
       h1 {
         margin: 0;
-        font-size: 4.6rem;
+        max-width: 700px;
+        font-size: 4.7rem;
         line-height: 0.95;
         letter-spacing: 0;
       }
 
       .lead {
-        max-width: 720px;
+        max-width: 690px;
         margin: 24px 0 0;
         color: var(--muted);
-        font-size: 1.2rem;
+        font-size: 1.18rem;
       }
 
       .actions {
@@ -130,13 +136,72 @@
         color: var(--text);
       }
 
+      .dossier {
+        display: grid;
+        gap: 14px;
+      }
+
+      .terminal,
+      .signal {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-strong);
+      }
+
+      .terminal {
+        padding: 18px;
+        box-shadow: 0 18px 80px rgba(0, 0, 0, 0.35);
+      }
+
+      .panel-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+        color: var(--amber);
+        font-size: 0.82rem;
+      }
+
+      pre {
+        overflow: auto;
+        margin: 0;
+        color: var(--muted);
+        font: inherit;
+        white-space: pre-wrap;
+      }
+
+      .cmd {
+        color: var(--green);
+      }
+
+      .result {
+        color: var(--text);
+      }
+
+      .filed {
+        color: var(--amber);
+      }
+
+      .signal {
+        display: grid;
+        grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+        gap: 18px;
+        align-items: center;
+        padding: 14px;
+      }
+
       .preview {
         display: block;
         width: 100%;
         border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--panel);
-        box-shadow: 0 18px 80px rgba(0, 0, 0, 0.42);
+        border-radius: 6px;
+        background: #050806;
+      }
+
+      .signal p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
       }
 
       .grid {
@@ -207,19 +272,31 @@
         font-size: 0.9rem;
       }
 
-      .prompt {
-        color: var(--green);
-      }
-
       .danger {
         color: var(--red);
+      }
+
+      @media (min-width: 801px) and (max-width: 1000px) {
+        .hero,
+        .sections {
+          grid-template-columns: 1fr;
+        }
+
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
       }
 
       @media (max-width: 800px) {
         .hero,
         .sections,
-        .grid {
+        .grid,
+        .signal {
           grid-template-columns: 1fr;
+        }
+
+        .hero {
+          min-height: 0;
         }
 
         .topline {
@@ -228,17 +305,15 @@
         }
 
         h1 {
-          font-size: 2.8rem;
+          font-size: 3rem;
         }
 
         .lead {
           font-size: 1rem;
         }
-      }
 
-      @media (min-width: 801px) and (max-width: 1000px) {
-        .grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+        .signal {
+          padding: 12px;
         }
       }
     </style>
@@ -246,78 +321,103 @@
   <body>
     <main class="shell">
       <header class="topline" aria-label="Project status">
-        <span><span class="prompt">$</span> terminaltribe --briefing</span>
-        <span class="status">public project pointer</span>
+        <span><span class="prompt">$</span> terminaltribe --field-briefing</span>
+        <span class="status">Campaign 1 free / source unpublished</span>
       </header>
 
       <section class="hero" aria-labelledby="title">
         <div>
-          <p class="eyebrow">A story-driven browser game for learning Linux terminal skills</p>
-          <h1 id="title">TerminalTribe</h1>
+          <p class="eyebrow">briefing // first operation</p>
+          <h1 id="title">Your first operation starts here.</h1>
           <p class="lead">
-            Type real shell-shaped commands in a safe simulated terminal, recover
-            field documents, and build practical command-line confidence through
-            authored missions.
+            TerminalTribe teaches Linux terminal skills through a safe simulated
+            shell, authored missions, recovered field notes, and visible proof
+            that each command did something useful.
           </p>
           <div class="actions">
             <a class="button" href="https://terminaltribe.com/">Play TerminalTribe</a>
             <a class="button secondary" href="https://github.com/rzkowskii/Terminal-Tribe">View GitHub Pointer</a>
           </div>
         </div>
-        <img
-          class="preview"
-          src="https://terminaltribe.com/social-preview.png"
-          alt="TerminalTribe terminal faceplate with green cursor and amber field stamp"
-          width="1200"
-          height="630"
-        >
+
+        <aside class="dossier" aria-label="Mission loop example">
+          <div class="terminal">
+            <div class="panel-label">
+              <span>mission loop</span>
+              <span>relay-map recovery</span>
+            </div>
+            <pre><span class="filed">mission:</span> recover the relay map
+<span class="cmd">$ pwd</span>
+<span class="result">/outpost</span>
+<span class="cmd">$ ls</span>
+<span class="result">archive  field-notes  relay</span>
+<span class="cmd">$ mkdir evidence</span>
+<span class="cmd">$ cp archive/map.txt evidence/</span>
+<span class="filed">evidence filed:</span> map.txt
+<span class="filed">debrief:</span> you copied the right artifact without damaging the archive</pre>
+          </div>
+
+          <div class="signal">
+            <img
+              class="preview"
+              src="https://terminaltribe.com/social-preview.png"
+              alt="TerminalTribe terminal faceplate with green cursor and amber field stamp"
+              width="1200"
+              height="630"
+            >
+            <p>
+              The live game turns small shell moves into mission progress:
+              inspect, create, copy, recover, and understand what changed.
+            </p>
+          </div>
+        </aside>
       </section>
 
       <section class="grid" aria-label="Playable content">
-        <div class="stat">
-          <strong>585</strong>
-          <span>authored playable levels</span>
-        </div>
         <div class="stat">
           <strong>90</strong>
           <span>free Campaign 1 missions</span>
         </div>
         <div class="stat">
-          <strong>450</strong>
-          <span>continuation campaign missions</span>
+          <strong>585</strong>
+          <span>authored playable levels</span>
         </div>
         <div class="stat">
           <strong>45</strong>
           <span>Advanced Operations labs</span>
         </div>
+        <div class="stat">
+          <strong>No</strong>
+          <span>account required for Campaign 1</span>
+        </div>
       </section>
 
       <section class="sections" aria-label="Product summary">
         <article class="section">
-          <h2>Start Free</h2>
+          <h2>briefing</h2>
           <p>
-            Campaign 1 runs in the browser without account or payment, covering
+            Campaign 1 opens in the browser without account or payment, covering
             movement, inspection, file operations, links, search, archives, and
             recovery habits.
           </p>
         </article>
         <article class="section">
-          <h2>Complete Unlock</h2>
+          <h2>field evidence</h2>
           <p>
-            Unlock the continuation campaigns plus Advanced Operations tracks for
-            Data Operator, Shell Automation, and Incident Response practice.
+            Commands are tied to recovered documents, route progress, and
+            after-action context, so practice feels like operating instead of
+            memorizing.
           </p>
         </article>
         <article class="section">
-          <h2>Learn By Operating</h2>
+          <h2>advanced operations</h2>
           <p>
-            TerminalTribe avoids throwaway drills. Each command is tied to a
-            mission, a recovered artifact, and a clearer sense of what the shell
-            just did.
+            Complete Unlock opens Campaigns 2-6 and Advanced Operations tracks
+            for Data Operator, Shell Automation, and Incident Response practice.
           </p>
         </article>
         <article class="section">
-          <h2>Public GitHub Role</h2>
+          <h2>public GitHub role</h2>
           <p>
             This repository is a promotional pointer. The game source code is
             not published here; the playable product lives at TerminalTribe.com.
